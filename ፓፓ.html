@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="am">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ትምህርቶች - ወልድያ ቅድስት ሥላሴ</title>
+        <style>
+            :root {
+                --primary-red: #390f0f;
+                --gold-accent: #cc7722;
+                --bg-black: #0b0e14;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: "Segoe UI", "Nyala", "Kefa", sans-serif;
+                background-color: var(--bg-black);
+                color: #ffffff;
+                overflow-x: hidden;
+                opacity: 0;
+                animation: pageFadeIn 1s ease-out forwards;
+            }
+
+            @keyframes pageFadeIn {
+                to {
+                    opacity: 1;
+                }
+            }
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(40px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .glow-effect {
+                position: fixed;
+                width: 800px;
+                height: 800px;
+                background: radial-gradient(
+                    circle,
+                    rgba(57, 15, 15, 0.4) 0%,
+                    rgba(0, 0, 0, 0) 70%
+                );
+                bottom: -200px;
+                right: -200px;
+                z-index: -1;
+            }
+
+            .main-container {
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 60px 20px;
+            }
+
+            .header-section {
+                text-align: center;
+                margin-bottom: 60px;
+                animation: slideInUp 0.8s ease-out;
+            }
+
+            .header-section h1 {
+                font-size: 45px;
+                color: var(--gold-accent);
+                text-shadow: 0 0 15px rgba(204, 119, 34, 0.3);
+            }
+
+            /* አዲሱ የሁለቱ ካርዶች ዲዛይን */
+            .category-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 30px;
+                margin-bottom: 70px;
+                animation: slideInUp 1s ease-out 0.2s forwards;
+                opacity: 0;
+            }
+
+            .cat-card {
+                background: linear-gradient(
+                    145deg,
+                    rgba(57, 15, 15, 0.3),
+                    rgba(204, 119, 34, 0.05)
+                );
+                border: 2px solid rgba(204, 119, 34, 0.2);
+                padding: 50px 30px; /* ሰፋ ተደርጓል */
+                border-radius: 25px;
+                text-align: center;
+                backdrop-filter: blur(15px);
+                transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .cat-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(204, 119, 34, 0.1),
+                    transparent
+                );
+                transition: 0.5s;
+            }
+
+            .cat-card:hover::before {
+                left: 100%;
+            }
+
+            .cat-card:hover {
+                transform: translateY(-15px) scale(1.02);
+                border-color: var(--gold-accent);
+                background: rgba(204, 119, 34, 0.15);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            }
+
+            .cat-card h3 {
+                color: var(--gold-accent);
+                font-size: 28px;
+                margin-bottom: 15px;
+            }
+
+            .cat-card p {
+                font-size: 16px;
+                color: #ccc;
+                letter-spacing: 1px;
+            }
+
+            .teacher-title {
+                color: var(--gold-accent);
+                border-left: 4px solid var(--primary-red);
+                padding-left: 15px;
+                margin: 50px 0 25px;
+                font-size: 24px;
+                animation: slideInUp 0.8s ease-out;
+            }
+
+            .quote-list {
+                display: grid;
+                gap: 12px;
+                animation: slideInUp 1s ease-out;
+            }
+
+            .quote-item {
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                padding: 18px 25px;
+                border-radius: 12px;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                transition: 0.3s;
+            }
+
+            .quote-item:hover {
+                background: rgba(57, 15, 15, 0.4);
+                border-color: var(--gold-accent);
+                padding-left: 35px;
+            }
+
+            .quote-text {
+                flex: 1;
+                font-size: 16px;
+                color: #eee;
+            }
+            .copy-hint {
+                font-size: 11px;
+                color: var(--gold-accent);
+                opacity: 0.5;
+            }
+
+            #copy-toast {
+                visibility: hidden;
+                position: fixed;
+                bottom: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--gold-accent);
+                color: white;
+                padding: 12px 30px;
+                border-radius: 50px;
+                font-weight: bold;
+                z-index: 1000;
+            }
+
+            #copy-toast.show {
+                visibility: visible;
+                animation: fadeInUp 0.4s;
+            }
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    bottom: 0;
+                }
+                to {
+                    opacity: 1;
+                    bottom: 40px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="glow-effect"></div>
+        <div id="copy-toast">በውብ ሁኔታ ተገልብጧል!</div>
+
+        <div class="main-container">
+            <div class="header-section">
+                <h1>የትምህርት ማዕከል</h1>
+                <p>ከመንፈሳዊ አባቶችና መምህራን የተወለዱ የሕይወት ምክሮች</p>
+            </div>
+
+            <div class="category-grid">
+                <div
+                    class="cat-card"
+                    onclick="window.location.href = 'መዝሙር.html'"
+                >
+                    <h3>🎶 መዝሙራት</h3>
+                    <p>የቅዱስ ያሬድ ዜማዎችና መንፈሳዊ መዝሙሮች</p>
+                </div>
+
+                <div
+                    class="cat-card"
+                    onclick="window.location.href = 'ትምህርተወንጌል.html'"
+                >
+                    <h3>📖 ወንጌል</h3>
+                    <p>የነፍስ ምግብና መንፈሳዊ ጥናቶች</p>
+                </div>
+            </div>
+
+            <h2 class="teacher-title">ዲያቆን ሄኖክ ኃይሌ — ተስፋን ፍለጋ</h2>
+            <div class="quote-list" id="henok-container"></div>
+
+            <h2 class="teacher-title">መምህር እዮብ ይመኑ — የሕይወት ስንቅ</h2>
+            <div class="quote-list" id="eyob-container"></div>
+        </div>
+
+        <script>
+            const stylizedSignature = `\n━━━━━━━━━━━━━━━━━━\n   ⛪ ተክለሥላሴ 2018 ወልድያ\n━━━━━━━━━━━━━━━━━━`;
+
+            const henokData = [
+                "ተስፋ መቁረጥ ከኃጢአት ሁሉ ይከብዳል፤ ምክንያቱም ንስሐ እንዳንገባ ያደርገናል።",
+                "እግዚአብሔር የጀመረውን ሳይጨርስ አይተውህም።",
+                "ሰው ቢተውህ እግዚአብሔር አይተውህም።",
+                "የወደቅህበት ቦታ ላይ አትቅረ፤ ተነስተህ ሩጥ።",
+                "ትናንት ያለፈ ታሪክ ነው፤ ዛሬ የእግዚአብሔር ስጦታ ነው።",
+                "ፈተና ለክብር ነው፤ መከራ ለበረከት ነው።",
+                "ፀሎት የልብ በር መክፈቻ ነው።",
+                "ለእግዚአብሔር የሚሳነው ነገር የለም።",
+                "እምነት ማለት ጨለማው ውስጥ ብርሃኑን ማየት ነው።",
+                "ትዕግስት የድል ሁሉ ቁልፍ ናት።",
+                "ደስታህን በሰው ላይ አታድርግ፤ በፈጣሪህ ላይ እንጂ።",
+                "ሕይወት በትግል ውስጥ ውበት አላት።",
+                "እግዚአብሔር ካንተ ጋር ከሆነ ማን ይቃወምሃል?",
+                "ዛሬ የጨለመብህ ነገ እንዲበራልህ ነው።",
+                "ፍቅር የሁሉ መጀመሪያ ነው።",
+                "ልብህን ለእግዚአብሔር ስጥ፤ እርሱ ይጠግነዋል።",
+                "ምስጋና በረከትን ይጨምራል።",
+                "ስህተትህን ለክብርህ ተጠቀምበት።",
+                "የእግዚአብሔር ጊዜ ሁልጊዜ ትክክል ነው።",
+                "ተስፋ የነፍስ መልሕቅ ናት。",
+            ];
+
+            const eyobData = [
+                "ሕይወትህን በእምነት ምራ፤ በስሜት አትመራ።",
+                "ራስህን ዝቅ አድርግ፤ እግዚአብሔር ከፍ ያደርግሃል።",
+                "የሰላም ምንጭ ንጹህ ሕሊና ነው።",
+                "ጊዜህን በከንቱ አታባክን፤ ዕድሜህን እየኖርክ ነው።",
+                "ሰው መሆን ትልቅ ክብር ነው።",
+                "ሌሎችን ይቅር በል፤ አንተም ይቅር ትባላለህ።",
+                "ትክክለኛ ስኬት ከፈጣሪ ጋር መሆን ነው።",
+                "መከራ ካልመጣ ብርታት አይመጣም።",
+                "መንፈሳዊነት ተግባር እንጂ ወሬ አይደለም።",
+                "ለራስህ ሳይሆን ለሌሎች ኑር።",
+                "ቅንነት የልብ ጌጥ ነው።",
+                "ሁልጊዜ አመስጋኝ ሁን።",
+                "ውስጣዊ ሰላም ከጸሎት ይገኛል።",
+                "እግዚአብሔርን መፍራት የጥበብ መጀመሪያ ነው።",
+                "ክፋትን በበጎነት አሸንፍ።",
+                "የነፍስህ ዋጋ ከዓለም ይበልጣል።",
+                "ሕይወት አጭር ናት፤ ለዘላለም ተዘጋጅ።",
+                "ንጽህና ከውጪ ሳይሆን ከውስጥ ይጀምራል።",
+                "እውነት ሁልጊዜ ታሸንፋለች።",
+                "በረከት የሚገኘው በመስጠት ነው።",
+            ];
+
+            function populateQuotes(data, containerId) {
+                const container = document.getElementById(containerId);
+                data.forEach((text) => {
+                    const div = document.createElement("div");
+                    div.className = "quote-item";
+                    div.innerHTML = `<span class="quote-text">${text}</span><span class="copy-hint">ንካ</span>`;
+                    div.onclick = () => {
+                        const finalMsg = `« ${text} »` + stylizedSignature;
+                        navigator.clipboard.writeText(finalMsg).then(() => {
+                            const toast = document.getElementById("copy-toast");
+                            toast.className = "show";
+                            setTimeout(() => {
+                                toast.className = "";
+                            }, 3000);
+                        });
+                    };
+                    container.appendChild(div);
+                });
+            }
+
+            populateQuotes(henokData, "henok-container");
+            populateQuotes(eyobData, "eyob-container");
+        </script>
+    </body>
+</html>
