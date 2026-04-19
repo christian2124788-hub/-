@@ -5,9 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ</title>
         <style>
-            /* =========================================
-           1. ጠቅላላ ገጽታ እና ቁልፍ አኒሜሽኖች (Keyframes)
-           ========================================= */
+            /* 1. ጠቅላላ ገጽታ */
             body {
                 margin: 0;
                 font-family: "Segoe UI", "Kefa", "Nyala", sans-serif;
@@ -23,7 +21,6 @@
                     opacity: 1;
                 }
             }
-
             @keyframes fadeInUp {
                 from {
                     opacity: 0;
@@ -35,8 +32,25 @@
                 }
             }
 
+            /* 2. ዳራ እና ብርሃን */
+            .bg-glow {
+                position: fixed;
+                width: 60vw;
+                height: 60vw;
+                background: radial-gradient(
+                    circle,
+                    rgba(57, 15, 15, 0.5) 0%,
+                    rgba(0, 0, 0, 0) 70%
+                );
+                top: -10vw;
+                left: -10vw;
+                z-index: -1;
+                animation: glowPulse 8s infinite ease-in-out;
+            }
+
             @keyframes glowPulse {
-                0% {
+                0%,
+                100% {
                     transform: scale(1);
                     opacity: 0.4;
                 }
@@ -44,252 +58,213 @@
                     transform: scale(1.1);
                     opacity: 0.6;
                 }
-                100% {
-                    transform: scale(1);
-                    opacity: 0.4;
-                }
             }
 
-            /* =========================================
-           2. የዳራ እና የአሰሳ ባር (Navbar)
-           ========================================= */
-            .bg-glow {
-                position: fixed;
-                width: 700px;
-                height: 700px;
-                background: radial-gradient(
-                    circle,
-                    rgba(57, 15, 15, 0.5) 0%,
-                    rgba(0, 0, 0, 0) 70%
-                );
-                top: -200px;
-                left: -200px;
-                z-index: -1;
-                animation: glowPulse 8s infinite ease-in-out;
-            }
-
+            /* 3. የአሰሳ ባር (Navbar) */
             nav {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 15px 8%;
+                padding: 15px 5%;
                 background: rgba(57, 15, 15, 0.4);
                 backdrop-filter: blur(15px);
                 border-bottom: 2px solid #cc7722;
                 position: sticky;
                 top: 0;
                 z-index: 100;
-                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             }
 
             .logo {
-                font-size: 22px;
+                font-size: clamp(16px, 4vw, 22px);
                 font-weight: bold;
                 color: #cc7722;
-                text-shadow: 0 0 10px rgba(204, 119, 34, 0.5);
             }
 
             nav ul {
+                display: none;
+                gap: 20px;
                 list-style: none;
-                display: flex;
-                gap: 25px;
                 margin: 0;
                 padding: 0;
+            }
+            @media (min-width: 768px) {
+                nav {
+                    padding: 15px 8%;
+                }
+                nav ul {
+                    display: flex;
+                }
             }
 
             nav ul li a {
                 text-decoration: none;
                 color: #eee;
-                font-size: 16px;
-                position: relative;
-                transition: color 0.3s ease;
+                font-size: 15px;
+                transition: 0.3s;
             }
-
             nav ul li a:hover {
                 color: #cc7722;
             }
 
-            nav ul li a::after {
-                content: "";
-                position: absolute;
-                width: 0;
-                height: 2px;
-                bottom: -5px;
-                left: 0;
-                background-color: #cc7722;
-                transition: width 0.3s ease;
+            .btn-group-nav {
+                display: flex;
+                gap: 8px;
+                align-items: center;
             }
-
-            nav ul li a:hover::after {
-                width: 100%;
+            .btn-study-nav {
+                border: 1px solid #cc7722;
+                color: #cc7722;
+                padding: 6px 12px;
+                border-radius: 4px;
+                text-decoration: none;
+                font-size: 13px;
+                transition: 0.3s;
             }
-
+            .btn-study-nav:hover {
+                background: #cc7722;
+                color: white;
+            }
             .btn-sign {
                 background: #cc7722;
                 color: #fff;
-                padding: 8px 20px;
+                padding: 6px 15px;
                 border-radius: 4px;
                 text-decoration: none;
                 font-weight: bold;
-                transition: all 0.3s ease;
+                font-size: 13px;
             }
 
-            .btn-sign:hover {
-                background: #390f0f;
-                border: 1px solid #cc7722;
-                transform: translateY(-2px);
-            }
-
-            /* =========================================
-           3. ዋናው ክፍል (Hero Section)
-           ========================================= */
+            /* 4. ዋናው ክፍል (Hero) */
             .hero {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                padding: 80px 10% 40px;
-                background: linear-gradient(
-                    to bottom,
-                    rgba(57, 15, 15, 0.3),
-                    transparent
-                );
+                padding: clamp(50px, 10vh, 100px) 5%;
             }
 
             .hero h1 {
-                font-size: 50px;
-                margin-bottom: 15px;
+                font-size: clamp(26px, 7vw, 45px);
                 color: #cc7722;
-                line-height: 1.2;
+                margin-bottom: 15px;
                 animation: fadeInUp 0.8s ease-out 0.2s forwards;
                 opacity: 0;
+                line-height: 1.2;
             }
 
-            .hero p {
-                font-size: 20px;
+            /* የታሪክ ጽሁፍ ሳጥን */
+            .history-text {
+                font-size: clamp(15px, 3.5vw, 18px);
                 color: #ddd;
-                max-width: 700px;
-                font-style: italic;
+                max-width: 800px;
+                line-height: 1.8;
+                background: rgba(255, 255, 255, 0.03);
+                padding: 25px;
+                border-radius: 15px;
+                border-left: 4px solid #cc7722;
+                margin-bottom: 30px;
+                text-align: justify;
                 animation: fadeInUp 0.8s ease-out 0.4s forwards;
                 opacity: 0;
             }
 
             .hero-btns {
-                margin: 40px 0;
                 display: flex;
-                gap: 20px;
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+                max-width: 320px;
                 animation: fadeInUp 0.8s ease-out 0.6s forwards;
                 opacity: 0;
             }
 
+            @media (min-width: 768px) {
+                .hero-btns {
+                    flex-direction: row;
+                    max-width: none;
+                    justify-content: center;
+                }
+            }
+
             .btn-primary,
-            .btn-secondary {
-                padding: 15px 40px;
+            .btn-secondary,
+            .btn-special {
+                padding: 14px 28px;
                 border-radius: 5px;
                 text-decoration: none;
                 font-weight: bold;
-                font-size: 18px;
-                transition: all 0.3s ease;
+                font-size: 16px;
+                text-align: center;
+                transition: 0.3s;
             }
 
             .btn-primary {
                 background: #cc7722;
                 color: #fff;
-                box-shadow: 0 5px 15px rgba(204, 119, 34, 0.4);
             }
-
-            .btn-primary:hover {
-                background: #390f0f;
-                border: 1px solid #cc7722;
-                transform: translateY(-3px);
-            }
-
             .btn-secondary {
-                background: transparent;
-                color: #cc7722;
                 border: 2px solid #cc7722;
-            }
-
-            .btn-secondary:hover {
-                background: rgba(204, 119, 34, 0.1);
-            }
-
-            /* =========================================
-           4. የታሪክ ክፍል (History Section)
-           ========================================= */
-            .history-section {
-                width: 85%;
-                max-width: 900px;
-                margin: 50px auto;
-                padding: 40px;
-                background: rgba(255, 255, 255, 0.02);
-                border: 1px solid rgba(204, 119, 34, 0.2);
-                border-radius: 20px;
-                position: relative;
-                animation: fadeInUp 1s ease-out 0.7s forwards;
-                opacity: 0;
-            }
-
-            .history-section h2 {
                 color: #cc7722;
-                font-size: 32px;
-                margin-top: 0;
-                border-bottom: 2px solid #390f0f;
-                display: inline-block;
-                padding-bottom: 10px;
+            }
+            .btn-special {
+                background: #390f0f;
+                color: #ffcc33;
+                border: 2px solid #ffcc33;
+                box-shadow: 0 0 10px rgba(255, 204, 51, 0.2);
+            }
+            .btn-special:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 20px rgba(255, 204, 51, 0.4);
             }
 
-            .history-text {
-                font-size: 18px;
-                line-height: 1.8;
-                color: #eee;
-                text-align: justify;
-            }
-
-            .history-highlight {
-                color: #cc7722;
-                font-weight: bold;
-            }
-
-            /* =========================================
-           5. የመረጃ ሰሌዳ (Dashboard)
-           ========================================= */
+            /* 5. የመረጃ ሰሌዳ (Dashboard) - የኖርማል ቁጥሮች አቀማመጥ */
             .dashboard-preview {
+                margin-top: 50px;
                 width: 90%;
+                max-width: 1000px;
                 background: rgba(57, 15, 15, 0.15);
                 border: 1px solid rgba(204, 119, 34, 0.3);
                 border-radius: 15px;
-                padding: 30px;
-                backdrop-filter: blur(10px);
-                display: flex;
-                justify-content: space-around;
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-                animation: fadeInUp 1s ease-out 0.9s forwards;
+                padding: 20px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
                 opacity: 0;
-                margin-bottom: 60px;
+                animation: fadeInUp 1s ease-out 0.8s forwards;
+            }
+
+            @media (min-width: 768px) {
+                .dashboard-preview {
+                    grid-template-columns: repeat(4, 1fr);
+                    padding: 40px;
+                }
             }
 
             .stat-card {
                 text-align: center;
-                width: 22%;
             }
-
             .stat-card h3 {
-                font-size: 38px;
+                font-size: clamp(28px, 6vw, 42px);
                 color: #cc7722;
-                margin: 0 0 5px 0;
-            }
-
-            .stat-card p {
-                color: #bbb;
-                font-size: 14px;
                 margin: 0;
+                font-family: sans-serif;
+            }
+            .stat-card p {
+                font-size: clamp(11px, 3vw, 14px);
+                color: #bbb;
+                margin: 5px 0 0 0;
             }
 
             .divider {
+                display: none;
                 width: 1px;
                 background-color: rgba(204, 119, 34, 0.3);
                 align-self: stretch;
+            }
+            @media (min-width: 768px) {
+                .divider {
+                    display: block;
+                }
             }
         </style>
     </head>
@@ -300,75 +275,59 @@
             <div class="logo">ወልድያ ቅድስት ሥላሴ</div>
             <ul>
                 <li><a href="#">መነሻ</a></li>
-                <li><a href="ፓፓ.html">ትምህርቶች</a></li>
+                <li><a href="#">ትምህርቶች</a></li>
                 <li><a href="#">ዜናዎች</a></li>
                 <li><a href="#">ስለ ደብሩ</a></li>
             </ul>
-            <a href="#" class="btn-sign">ግባ</a>
+            <div class="btn-group-nav">
+                <a href="ፓውሎስ.html" class="btn-study-nav">ዝማሬ ማጥኛ</a>
+                <a href="#" class="btn-sign">ግባ</a>
+            </div>
         </nav>
 
         <section class="hero">
-            <h1>የወልድያ ደብረ ብርሀን ቅድስት ሥላሴ የተክለሥላሴ ሰ/ት/ቤት</h1>
-            <p>«የአንድነትና የሦስትነት ምስክር»</p>
+            <h1>የወልድያ ደብረ ብርሀን ቅድስት ሥላሴ ሰ/ት/ቤት</h1>
 
-            <div class="hero-btns">
-                <a href="ፓውሊ.html" class="btn-primary">አሁኑኑ ተቀላቀሉ</a>
-                <a href="ፓፓ.html" class="btn-secondary">ትምህርቶችን እይ</a>
+            <div class="history-text">
+                ወልድያ ደብረ ብርሃን ቅድስት ሥላሴ ቤተክርስቲያን በወልድያ ከተማ የሚገኝ ጥንታዊና ታሪካዊ መካነ
+                አምልኮ ነው። ሰንበት ትምህርት ቤቱም ለ2 ዓመታት ከ 2016 ጀምሮ ወጣቶችን በሥነ-ምግባርና
+                በሃይማኖት ትምህርት ሲያንጽ ቆይቷል። በአሁኑ ወቅት የቴክኖሎጂ ውጤቶችን በመጠቀም ወንጌልን ለዓለም
+                ተደራሽ ለማድረግ በዝግጅት ላይ ይገኛል።
             </div>
 
-            <div class="history-section">
-                <h2>የሰንበት ትምህርት ቤቱ አመሠራረት</h2>
-                <p class="history-text">
-                    የወልድያ ደብረ ብርሀን ቅድስት ሥላሴ
-                    <span class="history-highlight">ተክለሥላሴ ሰንበት ትምህርት ቤት</span>
-                    በይፋ የተመሠረተው በ<span class="history-highlight"
-                        >መጋቢት ፲፭ ቀን 2016 ዓ.ም</span
-                    >
-                    ነው። ይህ መንፈሳዊ ማኅበር በሰሜን ወሎ ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ ቤተክርስቲያን
-                    ውስጥ በ<span class="history-highlight"
-                        >መ/ር ቀሲስ ፍሬው ገብረህይወት</span
-                    >
-                    እና በ፭ ዋና ዋና መሥራች አባላት ጥረት ተጀመረ። <br /><br />
-                    ሰንበት ትምህርት ቤቱ ከተመሠረተበት ጊዜ ጀምሮ በከፍተኛ ፍጥነት በማደግ ላይ ይገኛል። በአሁኑ
-                    ወቅት <span class="history-highlight">፵፭ (45)</span> ንቁ ወጣት
-                    አባላትን በማቀፍ እና ከ<span class="history-highlight"
-                        >፻፳ (120)</span
-                    >
-                    በላይ ሕፃናትን በቤተክርስቲያን ሥርዓትና በክርስትና ስነ-ምግባር እያነጸና እያስተማረ ይገኛል።
-                </p>
+            <div class="hero-btns">
+                <a href="ፓውሎስ.html" class="btn-special">የምስረታ በዓል ዝማሬዎች</a>
+                <a href="#" class="btn-primary">አሁኑኑ ተቀላቀሉ</a>
+                <a href="ፓፓ.html" class="btn-secondary">ትምህርቶችን እይ</a>
             </div>
 
             <div class="dashboard-preview">
                 <div class="stat-card">
-                    <h3>፵፭</h3>
+                    <h3>40+</h3>
                     <p>ንቁ አባላት</p>
                 </div>
                 <div class="divider"></div>
                 <div class="stat-card">
-                    <h3>፳+</h3>
+                    <h3>20+</h3>
                     <p>መምህራን</p>
                 </div>
                 <div class="divider"></div>
                 <div class="stat-card">
-                    <h3>፻፳+</h3>
-                    <p>የሰንበት ተማሪዎች</p>
+                    <h3>120+</h3>
+                    <p>ተማሪዎች</p>
                 </div>
                 <div class="divider"></div>
                 <div class="stat-card">
-                    <h3 id="count">0</h3>
-                    <p>የገጽ ጉብኝቶች</p>
+                    <h3 id="count" style="font-family: sans-serif">0</h3>
+                    <p>ጉብኝቶች</p>
                 </div>
             </div>
         </section>
 
         <script>
             function updateCounter() {
-                let count = localStorage.getItem("visitorCount");
-                if (count === null) {
-                    count = 1;
-                } else {
-                    count = parseInt(count) + 1;
-                }
+                let count = localStorage.getItem("visitorCount") || 0;
+                count = parseInt(count) + 1;
                 localStorage.setItem("visitorCount", count);
                 document.getElementById("count").innerText = count;
             }
