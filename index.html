@@ -1,35 +1,72 @@
 <!doctype html>
-<html lang="am">
+<html lang="am" style="scroll-behavior: smooth">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ</title>
+        <title>ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ | Digital Media</title>
         <style>
+            /* ------------------------------------------------------------------
+           1. CORE SYSTEM ARCHITECTURE (CSS VARIABLES)
+           ------------------------------------------------------------------
+        */
             :root {
                 --gold: #cc7722;
                 --light-gold: #ffcc33;
                 --deep-red: #390f0f;
-                --bg-dark: #05070a;
-                --glass: rgba(255, 255, 255, 0.03);
-                --border: rgba(255, 255, 255, 0.1);
+                --bg-dark: #020305;
+                --glass: rgba(255, 255, 255, 0.02);
+                --border: rgba(255, 255, 255, 0.08);
+                --neon-gold: rgba(204, 119, 34, 0.4);
+                --ethio-font: "Nyala", "Kefa", "Segoe UI", sans-serif;
+                --cubic: cubic-bezier(0.23, 1, 0.32, 1);
             }
 
+            /* ------------------------------------------------------------------
+           2. RESET & BASE STYLES
+           ------------------------------------------------------------------
+        */
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
+                cursor: none;
             }
 
             body {
-                font-family: "Nyala", "Kefa", "Segoe UI", sans-serif;
                 background-color: var(--bg-dark);
                 color: #ffffff;
+                font-family: var(--ethio-font);
                 overflow-x: hidden;
-                scroll-behavior: smooth;
+                line-height: 1.6;
+                selection-background-color: var(--gold);
             }
 
-            /* 🌌 Ultra-Modern Animated Background */
-            .ambient-bg {
+            ::-webkit-scrollbar {
+                width: 4px;
+            }
+            ::-webkit-scrollbar-track {
+                background: var(--bg-dark);
+            }
+            ::-webkit-scrollbar-thumb {
+                background: var(--gold);
+                border-radius: 10px;
+            }
+
+            /* ------------------------------------------------------------------
+           3. ADVANCED BACKGROUND ENGINE (CANVAS & ORBS)
+           ------------------------------------------------------------------
+        */
+            #canvas-bg {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -2;
+                pointer-events: none;
+            }
+
+            .ambient-layer {
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -37,323 +74,682 @@
                 height: 100%;
                 z-index: -1;
                 background: radial-gradient(
-                    circle at 20% 30%,
-                    #1a1010 0%,
-                    #05070a 100%
+                    circle at center,
+                    transparent,
+                    var(--bg-dark)
                 );
             }
 
-            .orb {
-                position: absolute;
-                width: 400px;
-                height: 400px;
+            .floating-orb {
+                position: fixed;
                 border-radius: 50%;
-                filter: blur(100px);
-                opacity: 0.2;
-                animation: move 20s infinite alternate;
-            }
-            .orb-1 {
-                background: var(--gold);
-                top: -10%;
-                left: -5%;
-            }
-            .orb-2 {
-                background: var(--deep-red);
-                bottom: 10%;
-                right: 0;
-                animation-delay: -5s;
+                filter: blur(120px);
+                opacity: 0.15;
+                z-index: -1;
+                pointer-events: none;
+                animation: drift 25s infinite alternate var(--cubic);
             }
 
-            @keyframes move {
-                from {
-                    transform: translate(0, 0);
+            @keyframes drift {
+                0% {
+                    transform: translate(0, 0) scale(1);
                 }
-                to {
-                    transform: translate(100px, 50px);
+                100% {
+                    transform: translate(150px, 100px) scale(1.2);
                 }
             }
 
-            /* 导航栏 (Navbar) */
-            nav {
+            /* ------------------------------------------------------------------
+           4. CUSTOM NEURAL CURSOR
+           ------------------------------------------------------------------
+        */
+            #cursor-dot {
+                width: 8px;
+                height: 8px;
+                background: white;
+                position: fixed;
+                border-radius: 50%;
+                z-index: 10000;
+                pointer-events: none;
+                transition: transform 0.1s;
+            }
+            #cursor-outline {
+                width: 40px;
+                height: 40px;
+                border: 1px solid var(--gold);
+                position: fixed;
+                border-radius: 50%;
+                z-index: 9999;
+                pointer-events: none;
+                transition: transform 0.15s ease-out;
+            }
+
+            /* ------------------------------------------------------------------
+           5. HEADER & NAVIGATION (REFINED)
+           ------------------------------------------------------------------
+        */
+            header {
+                position: sticky;
+                top: 0;
+                width: 100%;
+                z-index: 1000;
+                padding: 20px 6%;
+                background: rgba(2, 3, 5, 0.85);
+                backdrop-filter: blur(25px);
+                border-bottom: 1px solid var(--border);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 15px 6%;
-                background: rgba(5, 7, 10, 0.7);
-                backdrop-filter: blur(20px);
-                border-bottom: 1px solid var(--border);
-                position: sticky;
-                top: 0;
-                z-index: 1000;
             }
 
-            .logo-area {
+            .logo-box {
                 display: flex;
                 align-items: center;
                 gap: 15px;
             }
-            .logo-area img {
-                height: 50px;
-                width: auto;
-                filter: drop-shadow(0 0 10px rgba(204, 119, 34, 0.4));
+            .logo-box img {
+                height: 55px;
+                filter: drop-shadow(0 0 15px var(--neon-gold));
+                transition: 0.5s var(--cubic);
             }
-            .logo-text {
-                font-size: 22px;
-                font-weight: 800;
-                color: var(--gold);
-                letter-spacing: 1px;
+            .logo-box:hover img {
+                transform: rotate(360deg) scale(1.1);
             }
 
-            nav ul {
-                display: none;
+            .nav-links {
+                display: flex;
                 list-style: none;
-                gap: 30px;
+                gap: 40px;
             }
-            nav ul li a {
+            .nav-links li a {
                 text-decoration: none;
-                color: #ccc;
-                font-size: 15px;
-                transition: 0.3s;
+                color: #888;
+                font-size: 16px;
+                font-weight: 500;
+                transition: 0.4s;
+                position: relative;
             }
-            nav ul li a:hover {
-                color: var(--gold);
-            }
-
-            .btn-sign {
+            .nav-links li a::after {
+                content: "";
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 0;
+                height: 2px;
                 background: var(--gold);
-                color: #fff;
-                padding: 10px 25px;
-                border-radius: 50px;
-                text-decoration: none;
-                font-weight: bold;
-                font-size: 14px;
                 transition: 0.4s;
             }
-            .btn-sign:hover {
-                transform: scale(1.05);
-                box-shadow: 0 0 20px rgba(204, 119, 34, 0.4);
+            .nav-links li a:hover {
+                color: #fff;
+            }
+            .nav-links li a:hover::after {
+                width: 100%;
             }
 
-            /* 🏛 Hero Section */
+            .auth-btn {
+                background: linear-gradient(45deg, var(--gold), #9e5a1a);
+                color: white;
+                padding: 12px 30px;
+                border-radius: 50px;
+                font-weight: 800;
+                text-decoration: none;
+                border: 1px solid var(--border);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+                transition: 0.4s;
+            }
+            .auth-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 15px 30px var(--neon-gold);
+            }
+
+            /* ------------------------------------------------------------------
+           6. HERO SECTION (ULTRA-MODERN)
+           ------------------------------------------------------------------
+        */
             .hero {
-                position: relative;
-                padding: 100px 6%;
-                text-align: center;
+                min-height: 100vh;
+                padding: 120px 6% 60px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                text-align: center;
+                position: relative;
+            }
+
+            .badge-new {
+                background: rgba(204, 119, 34, 0.1);
+                border: 1px solid var(--gold);
+                padding: 6px 20px;
+                border-radius: 50px;
+                color: var(--gold);
+                font-size: 12px;
+                letter-spacing: 2px;
+                margin-bottom: 30px;
+                text-transform: uppercase;
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+                0% {
+                    opacity: 0.6;
+                }
+                50% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0.6;
+                }
             }
 
             .hero h1 {
-                font-size: clamp(40px, 8vw, 75px);
-                line-height: 1.1;
-                margin-bottom: 30px;
-                background: linear-gradient(to bottom, #fff 40%, var(--gold));
+                font-size: clamp(45px, 10vw, 95px);
+                font-weight: 900;
+                line-height: 1;
+                margin-bottom: 40px;
+                letter-spacing: -2px;
+                background: linear-gradient(to bottom, #fff, #888);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-                animation: fadeInUp 1s ease;
             }
 
-            .history-card {
+            .hero-desc-card {
+                background: var(--glass);
+                border: 1px solid var(--border);
+                padding: 50px;
+                border-radius: 40px;
+                max-width: 900px;
+                backdrop-filter: blur(20px);
+                margin-bottom: 60px;
+                transform: perspective(1000px) rotateX(10deg);
+                transition: 0.8s var(--cubic);
+            }
+            .hero-desc-card:hover {
+                transform: perspective(1000px) rotateX(0deg);
+                border-color: var(--gold);
+            }
+
+            .hero-desc-card p {
+                font-size: 22px;
+                color: #ccc;
+                line-height: 1.8;
+            }
+
+            .cta-container {
+                display: flex;
+                gap: 25px;
+                margin-bottom: 100px;
+            }
+            .btn-xl {
+                padding: 20px 50px;
+                border-radius: 100px;
+                text-decoration: none;
+                font-weight: 800;
+                font-size: 18px;
+                transition: 0.5s;
+            }
+            .btn-gold-fill {
+                background: var(--gold);
+                color: #fff;
+            }
+            .btn-outline-glass {
+                border: 1px solid var(--border);
+                color: #fff;
+                background: var(--glass);
+            }
+            .btn-xl:hover {
+                transform: scale(1.05) translateY(-5px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            }
+
+            /* ------------------------------------------------------------------
+           7. PREMIUM DASHBOARD GRID
+           ------------------------------------------------------------------
+        */
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 25px;
+                width: 100%;
+                max-width: 1200px;
+                margin-top: 50px;
+            }
+
+            .stat-card {
                 background: var(--glass);
                 border: 1px solid var(--border);
                 padding: 40px;
-                border-radius: 30px;
-                max-width: 900px;
-                backdrop-filter: blur(10px);
-                margin-bottom: 50px;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-                animation: fadeInUp 1.2s ease;
+                border-radius: 35px;
+                text-align: left;
+                position: relative;
+                overflow: hidden;
+                transition: 0.5s var(--cubic);
+            }
+            .stat-card:hover {
+                background: rgba(255, 255, 255, 0.05);
+                transform: translateY(-10px);
             }
 
-            .history-card p {
-                font-size: 19px;
-                line-height: 1.8;
-                color: #ddd;
-                text-align: center;
+            .stat-card::before {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(
+                    circle,
+                    var(--neon-gold),
+                    transparent 70%
+                );
+                opacity: 0;
+                transition: 0.5s;
+            }
+            .stat-card:hover::before {
+                opacity: 0.1;
             }
 
-            .cta-group {
-                display: flex;
-                gap: 20px;
-                flex-wrap: wrap;
-                justify-content: center;
-                animation: fadeInUp 1.4s ease;
-            }
-
-            .btn-main {
-                padding: 18px 40px;
-                border-radius: 50px;
-                text-decoration: none;
-                font-weight: 800;
-                font-size: 16px;
-                transition: 0.4s;
-            }
-
-            .btn-gold {
-                background: var(--gold);
-                color: white;
-                border: none;
-            }
-            .btn-outline {
-                border: 2px solid var(--gold);
+            .stat-card h3 {
+                font-size: 55px;
                 color: var(--gold);
+                margin-bottom: 10px;
+                font-family: sans-serif;
             }
-            .btn-main:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 30px rgba(204, 119, 34, 0.2);
+            .stat-card p {
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+                font-size: 13px;
             }
 
-            /* 📊 Premium Dashboard */
-            .dashboard {
+            /* ------------------------------------------------------------------
+           8. FEATURES / NEWS TICKER
+           ------------------------------------------------------------------
+        */
+            .news-section {
+                padding: 100px 6%;
+                background: rgba(255, 255, 255, 0.01);
+                border-top: 1px solid var(--border);
+            }
+            .section-tag {
+                color: var(--gold);
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 5px;
+                margin-bottom: 20px;
+                display: block;
+            }
+            .section-title {
+                font-size: 50px;
+                margin-bottom: 60px;
+            }
+
+            .news-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 30px;
+            }
+            .news-item {
+                height: 450px;
+                border-radius: 40px;
+                background-size: cover;
+                background-position: center;
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                align-items: flex-end;
+                padding: 40px;
+                border: 1px solid var(--border);
+                transition: 0.6s var(--cubic);
+            }
+            .news-item::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    to top,
+                    var(--bg-dark),
+                    transparent
+                );
+            }
+            .news-content {
+                position: relative;
+                z-index: 10;
+            }
+            .news-item:hover {
+                transform: scale(0.98);
+                border-color: var(--gold);
+            }
+
+            /* ------------------------------------------------------------------
+           9. FOOTER SYSTEM
+           ------------------------------------------------------------------
+        */
+            footer {
+                padding: 80px 6%;
+                border-top: 1px solid var(--border);
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 20px;
-                width: 100%;
-                max-width: 1100px;
-                margin-top: 80px;
-                animation: fadeInUp 1.6s ease;
+                gap: 50px;
             }
-
-            .stat-item {
-                background: var(--glass);
-                border: 1px solid var(--border);
-                padding: 30px;
-                border-radius: 25px;
+            .footer-col h4 {
+                color: var(--gold);
+                margin-bottom: 25px;
+                font-size: 20px;
+            }
+            .footer-col ul {
+                list-style: none;
+            }
+            .footer-col ul li {
+                margin-bottom: 12px;
+            }
+            .footer-col ul li a {
+                color: #666;
+                text-decoration: none;
                 transition: 0.3s;
             }
-            .stat-item:hover {
-                border-color: var(--gold);
-                background: rgba(204, 119, 34, 0.05);
+            .footer-col ul li a:hover {
+                color: #fff;
+                padding-left: 10px;
             }
 
-            .stat-item h3 {
-                font-size: 45px;
-                color: var(--gold);
-                font-family: sans-serif;
-                margin-bottom: 5px;
-            }
-            .stat-item p {
-                color: #888;
+            .copyright {
+                padding: 40px 6%;
+                text-align: center;
+                border-top: 1px solid var(--border);
+                color: #444;
                 font-size: 14px;
-                text-transform: uppercase;
-                letter-spacing: 2px;
             }
 
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(40px);
+            /* ------------------------------------------------------------------
+           10. ADVANCED RESPONSIVENESS
+           ------------------------------------------------------------------
+        */
+            @media (max-width: 992px) {
+                .nav-links {
+                    display: none;
                 }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            @media (min-width: 992px) {
-                nav ul {
-                    display: flex;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .hero {
-                    padding: 60px 20px;
-                }
-                .btn-main {
-                    width: 100%;
-                    text-align: center;
+                .hero h1 {
+                    font-size: 60px;
                 }
             }
         </style>
     </head>
     <body>
-        <div class="ambient-bg">
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-        </div>
+        <div id="cursor-dot"></div>
+        <div id="cursor-outline"></div>
+        <canvas id="canvas-bg"></canvas>
+        <div class="ambient-layer"></div>
+        <div
+            class="floating-orb"
+            style="
+                width: 500px;
+                height: 500px;
+                background: var(--gold);
+                top: -10%;
+                left: -5%;
+            "
+        ></div>
+        <div
+            class="floating-orb"
+            style="
+                width: 400px;
+                height: 400px;
+                background: var(--deep-red);
+                bottom: 10%;
+                right: 5%;
+            "
+        ></div>
 
-        <nav>
-            <div class="logo-area">
-                <img src="pawlos.png" alt="Logo" />
-                <div class="logo-text">ቅድስት ሥላሴ</div>
+        <header>
+            <div class="logo-box">
+                <img src="pawlos.png" alt="Church Logo" />
+                <div
+                    class="logo-text"
+                    style="
+                        font-size: 24px;
+                        font-weight: 800;
+                        color: var(--gold);
+                    "
+                >
+                    ተክለ ሥላሴ
+                </div>
             </div>
-            <ul>
+            <ul class="nav-links">
                 <li><a href="#">መነሻ</a></li>
-                <li><a href="ፓፓ.html">ትምህርቶች</a></li>
-                <li><a href="#">ዜናዎች</a></li>
-                <li><a href="#">ስለ ደብሩ</a></li>
             </ul>
-            <a href="#" class="btn-sign">ግባ / ተመዝገብ</a>
-        </nav>
+        </header>
 
-        <section class="hero">
-            <h1>
-                ወልድያ ደብረ ብርሀን <br />
-                ቅድስት ሥላሴ
-            </h1>
+        <main>
+            <section class="hero">
+                <span class="badge-new">የአንድነት እና የሶስትነት ምስክር!</span>
+                <h1>
+                    ወልድያ ደብረ ብርሀን <br />
+                    ቅድስት ሥላሴ
+                </h1>
 
-            <div class="history-card">
-                <p>
-                    ጥንታዊነትን ከዘመናዊነት ጋር በማጣመር፣ የወልድያ ደብረ ብርሃን ቅድስት ሥላሴ ሰንበት ትምህርት
-                    ቤት የወጣቶችን ሕይወት በወንጌል ብርሃንና በሥነ-ምግባር እያነጸ ይገኛል። የቴክኖሎጂ ውጤቶችን
-                    በመጠቀም ቃለ እግዚአብሔርን ለዓለም ተደራሽ የምናደርግበት ዲጂታል ማዕከል ነው።
+                <div class="hero-desc-card" id="tilt-card">
+                    <p>
+                        ጥንታዊነትን ከዘመናዊነት ጋር በማጣመር፣ የወልድያ ደብረ ብርሃን ቅድስት ሥላሴ ሰንበት
+                        ትምህርት ቤት የወጣቶችን ሕይወት በወንጌል ብርሃንና በሥነ-ምግባር እያነጸ ይገኛል። እኛ
+                        በቴክኖሎጂ የታገዘ የወንጌል ስርጭትን ለትውልድ እናደርሳለን።
+                    </p>
+                </div>
+
+                <div class="cta-container">
+                    <a href="#" class="btn-xl btn-gold-fill">የምስረታ በዓል ዝማሬዎች</a>
+                    <a href="#" class="btn-xl btn-outline-glass"
+                        >የትምህርት ማጥኛ ማዕከል</a
+                    >
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <h3>80+</h3>
+                        <p>ንቁ አባላት</p>
+                    </div>
+                    <div class="stat-card"></div>
+                    <div class="stat-card">
+                        <h3>70+</h3>
+                        <p>ህጻናት እና መአከላዊያን ተማሪዎች</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="visitor-count">0</h3>
+                        <p>የገጽ ጉብኝቶች</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="news-section">
+                <span class="section-tag">Explore</span>
+                <h2 class="section-title">አዳዲስ አገልግሎቶች</h2>
+                <div class="news-grid">
+                    <div
+                        class="news-item"
+                        style="
+                            background-image: url(&quot;https://images.unsplash.com/photo-1548625361-195feee1a482?auto=format&fit=crop&q=80&w=600&quot;);
+                        "
+                    >
+                        <div class="news-content">
+                            <h3>የዲጂታል ቤተ-መጽሐፍት</h3>
+                            <p>ጥንታዊ የብራና መጻሕፍት በዲጂታል መልክ።</p>
+                        </div>
+                    </div>
+                    <div
+                        class="news-item"
+                        style="
+                            background-image: url(&quot;https://images.unsplash.com/photo-1519810755548-39cd217da494?auto=format&fit=crop&q=80&w=600&quot;);
+                        "
+                    >
+                        <div class="news-content">
+                            <h3>ስነ-ፍጥረት</h3>
+                            <p>
+                                የእግዚ አብሄር ዘመን የማይለውጣቸው ምህንድስናዎች የማይለወጡ የማይደረስበት
+                                ቀመርና ጥበብ።
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-col">
+                <h4>ስለ እኛ</h4>
+                <p style="color: #555">
+                    ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ ሰንበት ትምህርት ቤት - የሚዲያና መረጃ ክፍል
                 </p>
             </div>
-
-            <div class="cta-group">
-                <a href="ፓውሎስ.html" class="btn-main btn-gold"
-                    >የምስረታ በዓል ዝማሬዎች</a
-                >
-                <a href="ፓፓ.html" class="btn-main btn-outline">ትምህርቶችን ማጥኛ</a>
+            <div class="footer-col">
+                <h4>ፈጣን ሊንኮች</h4>
+                <ul>
+                    <li><a href="#">ዝማሬዎች</a></li>
+                    <li><a href="#">ትምህርተ ሃይማኖት</a></li>
+                    <li><a href="#">ስርአተ ቅዳሴ</a></li>
+                    <li><a href="#">ግዕዝ ቋንቋ</a></li>
+                </ul>
             </div>
-
-            <div class="dashboard">
-                <div class="stat-item">
-                    <h3>40+</h3>
-                    <p>ንቁ አባላት</p>
-                </div>
-                <div class="stat-item">
-                    <h3>20+</h3>
-                    <p>መምህራን</p>
-                </div>
-                <div class="stat-item">
-                    <h3>120+</h3>
-                    <p>ተማሪዎች</p>
-                </div>
-                <div class="stat-item">
-                    <h3 id="count">0</h3>
-                    <p>የገጽ ጉብኝቶች</p>
-                </div>
+            <div class="footer-col">
+                <h4>ያግኙን</h4>
+                <p style="color: #555">ወልድያ፣ ኢትዮጵያ</p>
+                <p style="color: #555">Email: tekleslase725.com</p>
             </div>
-        </section>
+        </footer>
+
+        <div class="copyright">
+            &copy; 2026 ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ ሰንበት ትምህርት ቤት | Developed by
+            Media Dept
+        </div>
 
         <script>
-            // Smooth counter and visitor tracking
-            function initDashboard() {
-                let count = localStorage.getItem("visitorCount") || 0;
-                count = parseInt(count) + 1;
-                localStorage.setItem("visitorCount", count);
+            // A. Custom Cursor Logic
+            const dot = document.getElementById("cursor-dot");
+            const outline = document.getElementById("cursor-outline");
 
-                // Animated Counter effect
-                const countElement = document.getElementById("count");
-                let start = 0;
-                const end = count;
-                const duration = 2000;
-                const step = (timestamp) => {
-                    if (!start) start = timestamp;
-                    const progress = Math.min(
-                        (timestamp - start) / duration,
-                        1,
-                    );
-                    countElement.innerText = Math.floor(progress * end);
-                    if (progress < 1) window.requestAnimationFrame(step);
-                };
-                window.requestAnimationFrame(step);
+            window.addEventListener("mousemove", (e) => {
+                dot.style.left = e.clientX + "px";
+                dot.style.top = e.clientY + "px";
+
+                outline.animate(
+                    {
+                        left: e.clientX + "px",
+                        top: e.clientY + "px",
+                    },
+                    { duration: 500, fill: "forwards" },
+                );
+            });
+
+            // B. Canvas Particle System
+            const canvas = document.getElementById("canvas-bg");
+            const ctx = canvas.getContext("2d");
+            let particles = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.onresize = resize;
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 1.5;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.speedY = Math.random() * 0.5 - 0.25;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x > canvas.width) this.x = 0;
+                    if (this.x < 0) this.x = canvas.width;
+                    if (this.y > canvas.height) this.y = 0;
+                    if (this.y < 0) this.y = canvas.height;
+                }
+                draw() {
+                    ctx.fillStyle = "rgba(204, 119, 34, 0.3)";
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
 
-            window.onload = initDashboard;
+            function initParticles() {
+                for (let i = 0; i < 100; i++) particles.push(new Particle());
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p) => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            initParticles();
+            animateParticles();
+
+            // C. Tilt Effect Logic
+            const card = document.getElementById("tilt-card");
+            card.addEventListener("mousemove", (e) => {
+                let rect = card.getBoundingClientRect();
+                let x = e.clientX - rect.left;
+                let y = e.clientY - rect.top;
+                let centerX = rect.width / 2;
+                let centerY = rect.height / 2;
+                let rotateX = (y - centerY) / 20;
+                let rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            card.addEventListener("mouseleave", () => {
+                card.style.transform = `perspective(1000px) rotateX(10deg) rotateY(0deg)`;
+            });
+
+            // D. Smart Visitor Counter
+            function startCounter() {
+                let count = localStorage.getItem("vCount") || 750;
+                count = parseInt(count) + 1;
+                localStorage.setItem("vCount", count);
+
+                const el = document.getElementById("visitor-count");
+                let current = 0;
+                const step = Math.ceil(count / 100);
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= count) {
+                        el.innerText = count.toLocaleString();
+                        clearInterval(timer);
+                    } else {
+                        el.innerText = current.toLocaleString();
+                    }
+                }, 20);
+            }
+            window.onload = startCounter;
+
+            // E. Intersection Observer for Reveals
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = "1";
+                            entry.target.style.transform = "translateY(0)";
+                        }
+                    });
+                },
+                { threshold: 0.1 },
+            );
+
+            document
+                .querySelectorAll(".stat-card, .news-item")
+                .forEach((el) => {
+                    el.style.opacity = "0";
+                    el.style.transform = "translateY(40px)";
+                    el.style.transition = "1s var(--cubic)";
+                    observer.observe(el);
+                });
         </script>
     </body>
 </html>
