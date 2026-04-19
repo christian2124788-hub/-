@@ -3,624 +3,738 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>የዝማሬ ማጥኛ - ዘመናዊ ዕትም</title>
+        <meta
+            name="description"
+            content="Digital Hymn Archive for Orthodox Tewahedo Songs"
+        />
+        <title>የዝማሬ ማጥኛ - Ultramodern Edition</title>
+
         <style>
-            /* ዘመናዊ የከለር እና የዲዛይን ተለዋዋጮች */
+            /* ========================================
+           I. CSS VARIABLES & THEMING
+           ========================================
+        */
             :root {
-                --dark-bg: #050507;
+                --dark-bg: #030305;
                 --glass-bg: rgba(255, 255, 255, 0.03);
                 --glass-border: rgba(255, 255, 255, 0.08);
-
-                /* የትንሣኤ ቀለማት (ወርቃማና የብርሃን) */
                 --resurrection-gold: #ffd700;
-                --resurrection-glow: rgba(255, 215, 0, 0.15);
-
-                /* የእርገት ቀለማት (ሰማያዊና የደመና) */
+                --resurrection-glow: rgba(255, 215, 0, 0.2);
                 --ascension-blue: #00e5ff;
-                --ascension-glow: rgba(0, 229, 255, 0.15);
+                --ascension-glow: rgba(0, 229, 255, 0.3);
+                --text-main: #ffffff;
+                --text-dim: #a0a0a0;
+                --transition-smooth: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            }
+
+            /* ========================================
+           II. RESET & GLOBAL STYLES
+           ========================================
+        */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                -webkit-tap-highlight-color: transparent;
             }
 
             body {
-                margin: 0;
-                font-family: "Nyala", "Kefa", "Segoe UI", sans-serif;
                 background-color: var(--dark-bg);
-                color: #ffffff;
+                color: var(--text-main);
+                font-family: "Nyala", "Kefa", "Segoe UI", sans-serif;
                 overflow-x: hidden;
-                line-height: 1.6;
+                line-height: 1.8;
+                -webkit-font-smoothing: antialiased;
             }
 
-            /* 1. Dynamic Backgrounds (ትንሣኤና እርገት) */
+            /* ========================================
+           III. DYNAMIC BACKGROUND ENGINE
+           ========================================
+        */
             .bg-orbs {
                 position: fixed;
                 top: 0;
                 left: 0;
                 width: 100vw;
                 height: 100vh;
-                z-index: -1;
+                z-index: -2;
                 pointer-events: none;
                 overflow: hidden;
             }
 
-            .orb-resurrection {
+            .orb {
                 position: absolute;
-                top: -10%;
-                left: -10%;
-                width: 50vw;
-                height: 50vw;
-                background: radial-gradient(
-                    circle,
-                    var(--resurrection-glow) 0%,
-                    transparent 70%
-                );
-                animation: float 10s infinite alternate ease-in-out;
+                border-radius: 50%;
+                filter: blur(140px);
+                opacity: 0.12;
+                animation: float 25s infinite alternate ease-in-out;
             }
 
-            .orb-ascension {
-                position: absolute;
-                bottom: -10%;
+            .orb-1 {
+                top: -10%;
+                left: -10%;
+                width: 65vw;
+                height: 65vw;
+                background: var(--resurrection-gold);
+            }
+
+            .orb-2 {
+                bottom: -15%;
                 right: -10%;
-                width: 60vw;
-                height: 60vw;
-                background: radial-gradient(
-                    circle,
-                    var(--ascension-glow) 0%,
-                    transparent 70%
-                );
-                animation: float 12s infinite alternate-reverse ease-in-out;
+                width: 75vw;
+                height: 75vw;
+                background: var(--ascension-blue);
+                animation-delay: -7s;
+            }
+
+            .orb-3 {
+                top: 40%;
+                left: 30%;
+                width: 30vw;
+                height: 30vw;
+                background: #ff00ff;
+                opacity: 0.05;
+                animation-duration: 40s;
             }
 
             @keyframes float {
                 0% {
-                    transform: translate(0, 0) scale(1);
+                    transform: translate(0, 0) scale(1) rotate(0deg);
+                }
+                50% {
+                    transform: translate(100px, 50px) scale(1.1) rotate(45deg);
                 }
                 100% {
-                    transform: translate(50px, 50px) scale(1.1);
+                    transform: translate(-50px, 80px) scale(0.9) rotate(90deg);
                 }
             }
 
-            /* 2. ተንሳፋፊ የአሰሳ ባር (Floating Glass Nav) */
+            /* ========================================
+           IV. NAVIGATION SYSTEM
+           ========================================
+        */
             nav {
                 position: fixed;
-                top: 20px;
+                top: 25px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: rgba(10, 10, 15, 0.6);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
+                background: rgba(5, 5, 10, 0.8);
+                backdrop-filter: blur(30px);
+                -webkit-backdrop-filter: blur(30px);
                 border: 1px solid var(--glass-border);
                 border-radius: 50px;
-                padding: 10px 20px;
+                padding: 14px 40px;
                 display: flex;
-                gap: 20px;
+                gap: 30px;
                 z-index: 1000;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+                transition: 0.5s;
             }
 
             nav a {
-                color: #aaa;
+                color: var(--text-dim);
                 text-decoration: none;
-                font-weight: bold;
-                font-size: 14px;
-                padding: 8px 15px;
-                border-radius: 30px;
-                transition: all 0.3s ease;
+                font-weight: 600;
+                font-size: 15px;
+                letter-spacing: 1px;
+                transition: 0.4s;
+                position: relative;
             }
 
+            nav a::after {
+                content: "";
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: var(--resurrection-gold);
+                transition: 0.3s;
+            }
+
+            nav a:hover::after {
+                width: 100%;
+            }
             nav a:hover,
             nav a.active {
-                background: var(--glass-bg);
-                color: white;
-                box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+                color: var(--resurrection-gold);
+                text-shadow: 0 0 15px var(--resurrection-gold);
             }
 
-            .btn-home {
-                border: 1px solid #555;
-            }
-
-            /* 3. ዋና ክፍል (Header) */
+            /* ========================================
+           V. HERO & LOGO ARCHITECTURE
+           ========================================
+        */
             .hero {
                 text-align: center;
-                padding: 120px 20px 60px;
-                background: linear-gradient(
-                    to bottom,
-                    rgba(0, 0, 0, 0.8),
-                    transparent
-                );
+                padding: 160px 20px 20px;
+                position: relative;
             }
 
             .hero h1 {
-                font-size: clamp(30px, 8vw, 50px);
+                font-size: clamp(40px, 10vw, 75px);
                 margin: 0;
                 background: linear-gradient(
-                    45deg,
+                    to right,
+                    #fff,
                     var(--resurrection-gold),
-                    var(--ascension-blue)
+                    var(--ascension-blue),
+                    #fff
                 );
+                background-size: 200% auto;
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-                text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+                font-weight: 900;
+                animation: shine 8s linear infinite;
             }
 
-            /* 4. የካርድ ዲዛይን (Glassmorphism Cards) */
+            @keyframes shine {
+                to {
+                    background-position: 200% center;
+                }
+            }
+
+            .logo-showcase {
+                position: relative;
+                height: 400px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 20px 0 60px;
+                perspective: 1500px;
+            }
+
+            .logo-container {
+                position: relative;
+                width: 280px;
+                height: 280px;
+                background: rgba(255, 255, 255, 0.02);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                animation: morphing 10s ease-in-out infinite alternate;
+                z-index: 10;
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            }
+
+            .main-logo {
+                width: 180px;
+                height: 180px;
+                object-fit: contain;
+                filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.4));
+                transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                z-index: 11;
+            }
+
+            .logo-container:hover .main-logo {
+                transform: scale(1.1) rotate(5deg) translateZ(50px);
+            }
+
+            .spinning-ring {
+                position: absolute;
+                border-radius: 50%;
+                border: 2px solid transparent;
+                animation: spin 15s linear infinite;
+                opacity: 0.5;
+            }
+
+            .ring-1 {
+                width: 340px;
+                height: 340px;
+                border-top-color: var(--resurrection-gold);
+                border-bottom-color: var(--resurrection-gold);
+                box-shadow: 0 0 20px var(--resurrection-glow);
+            }
+
+            .ring-2 {
+                width: 380px;
+                height: 380px;
+                border-left-color: var(--ascension-blue);
+                border-right-color: var(--ascension-blue);
+                animation-duration: 25s;
+                animation-direction: reverse;
+                box-shadow: 0 0 20px var(--ascension-glow);
+            }
+
+            @keyframes morphing {
+                0% {
+                    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+                }
+                34% {
+                    border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+                }
+                67% {
+                    border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+                }
+                100% {
+                    border-radius: 60% 40% 30% 70% / 50% 60% 40% 60%;
+                }
+            }
+
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            /* ========================================
+           VI. CONTENT LAYOUT (CONTAINER)
+           ========================================
+        */
             .container {
-                max-width: 900px;
+                max-width: 1000px;
                 margin: 0 auto;
-                padding: 0 20px;
+                padding: 0 30px;
+                position: relative;
             }
 
             .section-title {
-                font-size: 2rem;
-                margin: 60px 0 30px;
+                font-size: 2.8rem;
+                margin: 100px 0 50px;
                 text-align: center;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 15px;
+                gap: 20px;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: 1s;
             }
 
-            /* የትንሣኤ ጭብጥ */
-            .theme-res {
-                color: var(--resurrection-gold);
-                text-shadow: 0 0 15px var(--resurrection-glow);
-            }
-            .theme-res .song-card {
-                border-left: 3px solid var(--resurrection-gold);
-            }
-            .theme-res .song-card:hover {
-                box-shadow: 0 10px 30px var(--resurrection-glow);
-            }
-            .theme-res .audio-player audio {
-                filter: sepia(100%) saturate(300%) hue-rotate(10deg);
+            .section-title.visible {
+                opacity: 1;
+                transform: translateY(0);
             }
 
-            /* የእርገት ጭብጥ */
-            .theme-asc {
-                color: var(--ascension-blue);
-                text-shadow: 0 0 15px var(--ascension-glow);
-            }
-            .theme-asc .song-card {
-                border-left: 3px solid var(--ascension-blue);
-            }
-            .theme-asc .song-card:hover {
-                box-shadow: 0 10px 30px var(--ascension-glow);
-            }
-            .theme-asc .audio-player audio {
-                filter: sepia(100%) saturate(300%) hue-rotate(180deg);
+            .section-title::before,
+            .section-title::after {
+                content: "";
+                height: 1px;
+                width: 100px;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--resurrection-gold),
+                    transparent
+                );
             }
 
+            /* ========================================
+           VII. HYMN CARD SYSTEM
+           ========================================
+        */
             .song-card {
                 background: var(--glass-bg);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
                 border: 1px solid var(--glass-border);
-                border-radius: 20px;
-                padding: 30px;
-                margin-bottom: 30px;
-                transform: translateY(50px);
+                border-radius: 30px;
+                padding: 45px;
+                margin-bottom: 50px;
+                transform: translateY(60px);
                 opacity: 0;
-                transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+                transition: var(--transition-smooth);
+                position: relative;
+                overflow: hidden;
             }
 
-            /* Scroll ሲደረግ የሚመጣ አኒሜሽን (JS ይጠቀማል) */
+            .song-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 4px;
+                height: 100%;
+                background: var(--resurrection-gold);
+                opacity: 0.5;
+            }
+
+            .theme-asc .song-card::before {
+                background: var(--ascension-blue);
+            }
+
             .song-card.visible {
                 transform: translateY(0);
                 opacity: 1;
+            }
+
+            .song-card:hover {
+                border-color: rgba(255, 255, 255, 0.2);
+                background: rgba(255, 255, 255, 0.06);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
             }
 
             .song-header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 1px solid var(--glass-border);
-                padding-bottom: 15px;
-                margin-bottom: 20px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                padding-bottom: 20px;
+                margin-bottom: 30px;
             }
 
             .song-title {
-                font-size: 1.4rem;
-                font-weight: bold;
+                font-size: 1.8rem;
+                font-weight: 800;
+                color: var(--resurrection-gold);
+                letter-spacing: 1px;
+            }
+
+            .theme-asc .song-title {
+                color: var(--ascension-blue);
             }
 
             .lyrics {
-                font-size: clamp(20px, 5vw, 26px);
+                font-size: clamp(24px, 6vw, 32px);
                 text-align: center;
-                color: #fff;
-                margin-bottom: 25px;
-                font-weight: 500;
+                margin-bottom: 35px;
+                font-weight: 700;
+                color: #eee;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             }
 
             .translation-box {
                 background: rgba(0, 0, 0, 0.4);
-                padding: 15px;
-                border-radius: 12px;
-                font-size: 1rem;
-                color: #bbb;
-                margin-bottom: 20px;
+                padding: 25px;
+                border-radius: 20px;
+                color: #ccc;
+                font-style: italic;
+                border-left: 3px solid rgba(255, 255, 255, 0.1);
+                font-size: 1.1rem;
+                line-height: 1.6;
             }
 
+            /* ========================================
+           VIII. AUDIO PLAYER CUSTOMIZATION
+           ========================================
+        */
             .audio-player {
-                background: rgba(255, 255, 255, 0.05);
-                border-radius: 50px;
-                padding: 5px 15px;
+                margin-top: 40px;
+                background: rgba(0, 0, 0, 0.3);
+                border-radius: 60px;
+                padding: 12px;
                 display: flex;
                 align-items: center;
+                border: 1px solid var(--glass-border);
             }
 
             audio {
                 width: 100%;
-                height: 40px;
+                height: 45px;
+                filter: invert(100%) hue-rotate(180deg) brightness(1.8);
                 outline: none;
             }
-            .repeat-mark {
-                opacity: 0.7;
+
+            /* ========================================
+           IX. FOOTER & MISC
+           ========================================
+        */
+            footer {
+                text-align: center;
+                padding: 100px 20px;
+                color: #444;
+                font-size: 14px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+
+            /* Media Queries for Mobile Responsiveness */
+            @media (max-width: 768px) {
+                nav {
+                    width: 90%;
+                    padding: 10px 20px;
+                    gap: 15px;
+                }
+                .hero {
+                    padding-top: 120px;
+                }
+                .logo-container {
+                    width: 200px;
+                    height: 200px;
+                }
+                .main-logo {
+                    width: 130px;
+                    height: 130px;
+                }
+                .ring-1 {
+                    width: 250px;
+                    height: 250px;
+                }
+                .ring-2 {
+                    width: 280px;
+                    height: 280px;
+                }
+                .song-card {
+                    padding: 25px;
+                }
+                .lyrics {
+                    font-size: 22px;
+                }
             }
         </style>
     </head>
     <body>
         <div class="bg-orbs">
-            <div class="orb-resurrection"></div>
-            <div class="orb-ascension"></div>
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
         </div>
 
-        <nav>
-            <a href="index.html" class="btn-home">⌂ መነሻ</a>
-            <a href="#resurrection">ትንሣኤ (1-9)</a>
-            <a href="#ascension">እርገት (1-9)</a>
+        <nav id="mainNav">
+            <a href="index.html">⌂ መነሻ</a>
+            <a href="#resurrection">ትንሣኤ</a>
+            <a href="#ascension">እርገት</a>
+            <a href="#about">መረጃ</a>
         </nav>
 
         <header class="hero">
-            <h1>የዝማሬ ማጥኛ ገጽ</h1>
-            <p style="color: #888; font-size: 18px">የብርሃንና የክብር ዝማሬዎች</p>
+            <h1 id="mainTitle">የዝማሬ ማጥኛ ገጽ</h1>
+            <p
+                style="
+                    color: #666;
+                    margin-top: 15px;
+                    letter-spacing: 3px;
+                    font-weight: bold;
+                "
+            >
+                WOLDIA HOLY TRINITY SUNDAY SCHOOL
+            </p>
         </header>
 
-        <div class="container">
-            <div id="resurrection" class="theme-res">
-                <h2 class="section-title">☀️ የትንሣኤ መዝሙራት</h2>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፩. ክርስቶስ ትንሥአ</div>
-                    </div>
-                    <div class="lyrics">
-                        ክርስቶስ ትንሥአ እሙታን በዐቢይ ኃይል ወሥልጣን፤<br />አሰሮ ለሰይጣን አግዐዞ ለአዳም
-                        ሰላም እምይእዜሰ ይኩን ሰላም፡፡
-                    </div>
-                    <div class="translation-box">
-                        <b>ትርጉም፦</b> ክርስቶስ በታላቅ ኃይልና ሥልጣን ከሙታን ተለይቶ ተነሣ፤ ሰይጣንን
-                        አሰረው አዳምን ነጻ አወጣው፤ ከዛሬ ጀምሮ ሰላም ይሁን ሰላም፡፡
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/t1.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፪. ዮም ፍሥሐ</div>
-                    </div>
-                    <div class="lyrics">
-                        ዮም ፍሥሐ ኮነ ሰንበተ ክርስቲያን፤<br />እስመ ተንሥአ ክርስቶስ እሙታን፡፡
-                    </div>
-                    <div class="translation-box">
-                        <b>ትርጉም፦</b> ክርስቶስ ከሙታን ተለይቶ ተነሥቷልና ዛሬ በክርስቲያን ሰንበት
-                        (እሁድ) ደስታ ሆነ፡፡
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/t2.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፫. አማን በአማን</div>
-                    </div>
-                    <div class="lyrics">አማን በአማን ተንሥአ፤<br />ተንሥአ እምነ ሙታን፡፡</div>
-                    <div class="translation-box">
-                        <b>ትርጉም፦</b> በእውነት በእውነት ከሙታን መካከል ተለይቶ ተነሣ፡፡
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/t3.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፬. ገብረ ሰላም</div>
-                    </div>
-                    <div class="lyrics">
-                        ገብረ ሰላም በመስቀሉ፤<br />ትንሣኤሁ አግሃደ ሰላመ ገብረ፡፡
-                    </div>
-                    <div class="translation-box">
-                        <b>ትርጉም፦</b> በትንሣኤው ገለጠው (አበራው)፤ በመስቀሉም ሰላምን አደረገ
-                        (መሠረተ)፡፡
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/t4.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፭. ግብረ በዓል</div>
-                    </div>
-                    <div class="lyrics">
-                        ግብረ በዓለ በትፍሥሕት፤<br />ዘቲ ፋሲካ ቀዳሚት ሕግ፡፡
-                    </div>
-                    <div class="translation-box">
-                        <b>ትርጉም፦</b> በደስታ በዓልን አድርጉ፤ ይህች ፋሲካ የቀደመች ሕግ ናት፡፡
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/t5.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፮. ሰላም</div>
-                    </div>
-                    <div class="lyrics">ሰላም፤<br />እምይእዜሰ ይኩን ሰላም፡፡</div>
-                    <div class="translation-box">
-                        <b>ትርጉም፦</b> ከእንግዲህ ወዲህ ሰላም ይሁን፡፡
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/t6.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፯. ለጻድቃን</div>
-                    </div>
-                    <div class="lyrics">
-                        ለጻድቃን መደኃኒቶሙ፤<br />እሙንቱ ተንሥአ ክርስቶስ ተንሥአ መደኃኒት፡፡
-                    </div>
-                    <div class="translation-box">
-                        <b>ትርጉም፦</b> ለጻድቃን መድኃኒታቸው መድኃኒት የሆነው ክርስቶስ ከሙታን መካከል
-                        ተነሣ፡፡
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/t7.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፰. ሰበካ ትንሣኤ</div>
-                    </div>
-                    <div class="lyrics">ሰበካ ትንሣኤ፤<br />እዋልድሃ ለጽዮን፡፡</div>
-                    <div class="translation-box">
-                        <b>ትርጉም፦</b> የጽዮን ልጆች የትንሣኤውን መገኘት (መሰበክ) ተናገሩ፡፡
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/t8.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፱. ፋሲካ</div>
-                    </div>
-                    <div class="lyrics">ፋሲካ፤<br />ተዝካረ ትንሣኤሁ ለመድኃኒትነ፡፡</div>
-                    <div class="translation-box">
-                        <b>ትርጉም፦</b> ፋሲካ የመድኃኒታችን የትንሣኤው መታሰቢያ በዓል ነው፡፡
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/t9.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-            </div>
-
-            <div id="ascension" class="theme-asc">
-                <h2 class="section-title">☁️ የእርገት መዝሙራት</h2>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፩. ዐርገ በስብሐት</div>
-                    </div>
-                    <div class="lyrics">
-                        ዐርገ በስብሐት ውስተ ሰማያት <span class="repeat-mark">(፪)</span
-                        ><br />በለበወ ወበይባቤ <span class="repeat-mark">(፪)</span>
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/e1.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፪. ዐርገ ወልድ</div>
-                    </div>
-                    <div class="lyrics">
-                        ዐርገ ወልድ ደበ መንበሩ <span class="repeat-mark">(፪)</span
-                        ><br />በስብሐተ መላእክት ትንሣኤሁ ዘመነ
-                        <span class="repeat-mark">(፪)</span>
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/e2.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፫. መንፈስ ቅዱስ ወረደ</div>
-                    </div>
-                    <div class="lyrics">
-                        መንፈስ ቅዱስ ወረደ ላዕለ ሐዋርያት
-                        <span class="repeat-mark">(፪)</span><br />ተመሲሎ በነደ እሳት
-                        <span class="repeat-mark">(፪)</span>
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/e3.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፬. በዘዐርገ</div>
-                    </div>
-                    <div class="lyrics">
-                        በዘዐርገ በስብሐት ውስተ ሰማያት <span class="repeat-mark">(፪)</span
-                        ><br />ተኩነኑ ኩሎ መላእክት ወኩሉ ፍጥረት
-                        <span class="repeat-mark">(፪)</span>
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/e4.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፭. እምድኅረ ትንሣኤ</div>
-                    </div>
-                    <div class="lyrics">
-                        እምድኅረ ትንሣኤ እሙታን <span class="repeat-mark">(፪)</span
-                        ><br />ዐርገ ውስተ ሰማያት <span class="repeat-mark">(፪)</span>
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/e5.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፮. እስመ አሐዱ</div>
-                    </div>
-                    <div class="lyrics">
-                        እስመ አሐዱ ውእቱ መንፈስ ቅዱስ <span class="repeat-mark">(፪)</span
-                        ><br />ዘተሐውጠ ላዕለ ሐዋርያት በመንፈሰ ቅዱስ ነበቡ በነገረ ኩሉ በሐውርት
-                        <span class="repeat-mark">(፪)</span>
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/e6.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፯. ትንሣኤሁ ገብረ</div>
-                    </div>
-                    <div class="lyrics">
-                        ትንሣኤሁ ገብረ በሰንበት ዐርገ በስብሐት ውስተ ሰማያት
-                        <span class="repeat-mark">(፪)</span><br />ሰላመ ይደሉ ለኩሎነ
-                        ወለበወነ ወየበበነ <span class="repeat-mark">(፪)</span>
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/e7.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፰. ዳግመ ይመጽእ</div>
-                    </div>
-                    <div class="lyrics">
-                        ዐርገ በስብሐት ውስተ ሰማያት <span class="repeat-mark">(፪)</span
-                        ><br />ዳግመ ይመጽእ በዝየሁ ስብሐት
-                        <span class="repeat-mark">(፪)</span>
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/e8.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
-
-                <div class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፱. ይቤሎሙ ኢየሱስ</div>
-                    </div>
-                    <div class="lyrics">
-                        ይቤሎሙ ኢየሱስ ለሐዋርያሁ <span class="repeat-mark">(፪)</span
-                        ><br />አዐርግ በሰላም ኀበ አቡየ ወአቡክሙ ኀበ አምላኪየ ወአምላክክሙ
-                        <span class="repeat-mark">(፪)</span>
-                    </div>
-                    <div class="audio-player">
-                        <audio controls>
-                            <source src="audio/e9.mp3" type="audio/mpeg" />
-                        </audio>
-                    </div>
-                </div>
+        <div class="logo-showcase">
+            <div class="spinning-ring ring-1"></div>
+            <div class="spinning-ring ring-2"></div>
+            <div class="logo-container">
+                <img src="pawlos.png" alt="Church Logo" class="main-logo" />
             </div>
         </div>
 
-        <footer
-            style="
-                text-align: center;
-                padding: 60px 20px;
-                color: #666;
-                margin-top: 40px;
-            "
-        >
-            <p>© 2026 ወልድያ ቅድስት ሥላሴ ሰ/ት/ቤት | ዘመናዊ የጥናት ማዕከል</p>
+        <main class="container">
+            <section id="resurrection" class="theme-res">
+                <h2 class="section-title">☀️ የትንሣኤ መዝሙራት</h2>
+
+                <article class="song-card">
+                    <div class="song-header">
+                        <div class="song-title">፩. ክርስቶስ ትንሥአ</div>
+                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
+                    </div>
+                    <div class="lyrics">
+                        ክርስቶስ ትንሥአ እሙታን በዐቢይ ኃይል ወሥልጣን፤<br />
+                        አሰሮ ለሰይጣን አግዐዞ ለአዳም ሰላም እምይእዜሰ ይኩን ሰላም፡፡
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም፦</strong> ክርስቶስ በታላቅ ኃይልና ሥልጣን ከሙታን ተለይቶ
+                        ተነሣ፤ ሰይጣንን አሰረው አዳምን ነጻ አወጣው፤ ከዛሬ ጀምሮ ሰላም ይሁን ሰላም፡፡
+                    </div>
+                    <div class="audio-player">
+                        <audio controls preload="none">
+                            <source src="audio/t1.mp3" type="audio/mpeg" />
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="song-card">
+                    <div class="song-header">
+                        <div class="song-title">፪. ዮም ፍሥሐ ኮነ</div>
+                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
+                    </div>
+                    <div class="lyrics">
+                        ዮም ፍሥሐ ኮነ ሰንበተ ክርስቲያን፤<br />
+                        እስመ ተንሥአ ክርስቶስ እሙታን፡፡
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም፦</strong> ክርስቶስ ከሙታን ተለይቶ ተነሥቷልና ዛሬ በክርስቲያን
+                        ሰንበት (እሁድ) ደስታ ሆነ፡፡
+                    </div>
+                    <div class="audio-player">
+                        <audio controls preload="none">
+                            <source src="audio/t2.mp3" type="audio/mpeg" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="song-card">
+                    <div class="song-header">
+                        <div class="song-title">፫. ዝንቱ ውእቱ መካን</div>
+                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
+                    </div>
+                    <div class="lyrics">
+                        ዝንቱ ውእቱ መካን ዘተቀብረ ቦቱ እግዚእነ (፪)<br />
+                        ሰላም ለክሙ ኦ ማኅበረ ቅዱሳን (፪)
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም፦</strong> ጌታችን የተቀበረበት ቦታ ይህ ነው፤ ቅዱሳን ሆይ
+                        ሰላም ለእናንተ ይሁን።
+                    </div>
+                    <div class="audio-player">
+                        <audio controls preload="none">
+                            <source src="audio/t3.mp3" type="audio/mpeg" />
+                        </audio>
+                    </div>
+                </article>
+            </section>
+
+            <section id="ascension" class="theme-asc">
+                <h2 class="section-title">☁️ የእርገት መዝሙራት</h2>
+
+                <article class="song-card">
+                    <div class="song-header">
+                        <div class="song-title">፩. ዐርገ በስብሐት</div>
+                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
+                    </div>
+                    <div class="lyrics">
+                        ዐርገ በስብሐት ውስተ ሰማያት (፪)<br />
+                        በለበወ ወበይባቤ (፪)
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም፦</strong> ጌታችን በምስጋና ወደ ሰማያት ወጣ፤ በደስታና
+                        በእልልታም አረገ።
+                    </div>
+                    <div class="audio-player">
+                        <audio controls preload="none">
+                            <source src="audio/e1.mp3" type="audio/mpeg" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="song-card">
+                    <div class="song-header">
+                        <div class="song-title">፪. ዐርገ ወልድ</div>
+                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
+                    </div>
+                    <div class="lyrics">
+                        ዐርገ ወልድ ደበ መንበሩ (፪)<br />
+                        በስብሐተ መላእክት ትንሣኤሁ ዘመነ (፪)
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም፦</strong> ወልድ ወደ ዙፋኑ ወጣ፤ በመላእክት ምስጋናም
+                        ትንሣኤውን አበሰረ።
+                    </div>
+                    <div class="audio-player">
+                        <audio controls preload="none">
+                            <source src="audio/e2.mp3" type="audio/mpeg" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="song-card">
+                    <div class="song-header">
+                        <div class="song-title">፫. ዐርገ እግዚአብሔር</div>
+                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
+                    </div>
+                    <div class="lyrics">
+                        ዐርገ እግዚአብሔር በቃለ ቀርን (፪)<br />
+                        ወእግዚእነ በቃለ መለከት (፪)
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም፦</strong> እግዚአብሔር በደስታ ድምፅ አረገ፤ ጌታችንም በመለከት
+                        ድምፅ ዐረገ።
+                    </div>
+                    <div class="audio-player">
+                        <audio controls preload="none">
+                            <source src="audio/e3.mp3" type="audio/mpeg" />
+                        </audio>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <footer>
+            <p>የወልድያ ደብረብርሀን ቅድስት ሥላሴ የተክለሥላሴ ሰንበት ትምህርትቤት</p>
+            <p style="margin-top: 10px; font-weight: 300">
+                debrebrhan holy trinity church of woldia-teklesilassie sunday
+                school- V4.0.1
+            </p>
+            <p style="margin-top: 20px; font-size: 11px; opacity: 0.5">
+                Developed by sunday schools media departments © 2018
+            </p>
         </footer>
 
         <script>
-            // 1. Scroll Animation (ካርዶች ወደ ታች ስንወርድ ብቅ እንዲሉ)
-            const observer = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add("visible");
+            /**
+             * 1. Intersection Observer for Scroll Animations
+             * Triggers cards and titles when they enter the viewport
+             */
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px",
+            };
+
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        // Once visible, no need to observe anymore
+                        scrollObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Register elements to observer
+            document
+                .querySelectorAll(".song-card, .section-title")
+                .forEach((el) => {
+                    scrollObserver.observe(el);
+                });
+
+            /**
+             * 2. Intelligent Audio Control
+             * Ensures only one track plays at a time and adds visual feedback
+             */
+            const allAudios = document.querySelectorAll("audio");
+            allAudios.forEach((audio) => {
+                audio.addEventListener("play", () => {
+                    // Pause all other audios
+                    allAudios.forEach((otherAudio) => {
+                        if (otherAudio !== audio) {
+                            otherAudio.pause();
                         }
                     });
-                },
-                { threshold: 0.1 },
-            );
 
-            document
-                .querySelectorAll(".song-card")
-                .forEach((card) => observer.observe(card));
-
-            // 2. Smart Audio Player (አንዱ ሲጫወት ሌላው እንዲቆም)
-            const audios = document.querySelectorAll("audio");
-            audios.forEach((audio) => {
-                audio.addEventListener("play", () => {
-                    audios.forEach((a) => {
-                        if (a !== audio) a.pause();
-                    });
-
-                    // የተመረጠውን ካርድ ብርሃን መጨመር
-                    document
-                        .querySelectorAll(".song-card")
-                        .forEach((c) => (c.style.transform = ""));
-                    audio.closest(".song-card").style.transform = "scale(1.02)";
+                    // Add "Glow" effect to active card
+                    audio.closest(".song-card").style.boxShadow =
+                        "0 0 30px rgba(255, 215, 0, 0.2)";
                 });
+
                 audio.addEventListener("pause", () => {
-                    audio.closest(".song-card").style.transform = "";
+                    audio.closest(".song-card").style.boxShadow = "none";
                 });
             });
+
+            /**
+             * 3. Navigation Active State on Scroll
+             */
+            window.addEventListener("scroll", () => {
+                let current = "";
+                const sections = document.querySelectorAll("section");
+                const navLinks = document.querySelectorAll("nav a");
+
+                sections.forEach((section) => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute("id");
+                    }
+                });
+
+                navLinks.forEach((link) => {
+                    link.classList.remove("active");
+                    if (link.getAttribute("href").includes(current)) {
+                        link.classList.add("active");
+                    }
+                });
+            });
+
+            // Console Tag for Developers
+            console.log(
+                "%c Church Media Portal Loaded ",
+                "background: #ffd700; color: #000; font-weight: bold; padding: 5px;",
+            );
         </script>
     </body>
 </html>
