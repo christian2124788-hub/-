@@ -5,31 +5,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ | Digital Media</title>
         <style>
-            /* ------------------------------------------------------------------
-           1. CORE SYSTEM ARCHITECTURE (CSS VARIABLES)
-           ------------------------------------------------------------------
-        */
             :root {
-                --gold: #cc7722;
-                --light-gold: #ffcc33;
-                --deep-red: #390f0f;
-                --bg-dark: #020305;
-                --glass: rgba(255, 255, 255, 0.02);
-                --border: rgba(255, 255, 255, 0.08);
-                --neon-gold: rgba(204, 119, 34, 0.4);
+                /* የተሻሻለ የንጉሳዊ ቀለም ጥምረት */
+                --gold: #d4af37;
+                --bright-gold: #ffdf00;
+                --deep-red: #4a0e0e;
+                --bg-dark: #0a0b10;
+                --glass: rgba(255, 255, 255, 0.03);
+                --border: rgba(255, 255, 255, 0.1);
+                --neon-gold: rgba(212, 175, 55, 0.25);
                 --ethio-font: "Nyala", "Kefa", "Segoe UI", sans-serif;
                 --cubic: cubic-bezier(0.23, 1, 0.32, 1);
             }
 
-            /* ------------------------------------------------------------------
-           2. RESET & BASE STYLES
-           ------------------------------------------------------------------
-        */
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
-                cursor: none;
+            }
+
+            /* ለኮምፒውተር ብቻ ማውዝ እንዲጠፋ (ስልክ ላይ አይሰራም) */
+            @media (min-width: 1025px) {
+                body {
+                    cursor: none;
+                }
+                * {
+                    cursor: none;
+                }
             }
 
             body {
@@ -38,40 +40,20 @@
                 font-family: var(--ethio-font);
                 overflow-x: hidden;
                 line-height: 1.6;
-                selection-background-color: var(--gold);
+                -webkit-font-smoothing: antialiased;
             }
 
-            ::-webkit-scrollbar {
-                width: 4px;
-            }
-            ::-webkit-scrollbar-track {
-                background: var(--bg-dark);
-            }
-            ::-webkit-scrollbar-thumb {
-                background: var(--gold);
-                border-radius: 10px;
-            }
-
-            /* ------------------------------------------------------------------
-           3. ADVANCED BACKGROUND ENGINE (CANVAS & ORBS)
-           ------------------------------------------------------------------
-        */
+            /* Background Elements */
             #canvas-bg {
                 position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
+                inset: 0;
                 z-index: -2;
                 pointer-events: none;
             }
 
             .ambient-layer {
                 position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
+                inset: 0;
                 z-index: -1;
                 background: radial-gradient(
                     circle at center,
@@ -83,59 +65,57 @@
             .floating-orb {
                 position: fixed;
                 border-radius: 50%;
-                filter: blur(120px);
+                filter: blur(100px);
                 opacity: 0.15;
                 z-index: -1;
                 pointer-events: none;
-                animation: drift 25s infinite alternate var(--cubic);
+                animation: drift 20s infinite alternate var(--cubic);
             }
 
             @keyframes drift {
-                0% {
+                from {
                     transform: translate(0, 0) scale(1);
                 }
-                100% {
-                    transform: translate(150px, 100px) scale(1.2);
+                to {
+                    transform: translate(100px, 50px) scale(1.2);
                 }
             }
 
-            /* ------------------------------------------------------------------
-           4. CUSTOM NEURAL CURSOR
-           ------------------------------------------------------------------
-        */
-            #cursor-dot {
-                width: 8px;
-                height: 8px;
-                background: white;
-                position: fixed;
-                border-radius: 50%;
-                z-index: 10000;
-                pointer-events: none;
-                transition: transform 0.1s;
-            }
+            /* Neural Cursor Styles */
+            #cursor-dot,
             #cursor-outline {
-                width: 40px;
-                height: 40px;
-                border: 1px solid var(--gold);
                 position: fixed;
                 border-radius: 50%;
                 z-index: 9999;
                 pointer-events: none;
-                transition: transform 0.15s ease-out;
+                display: none;
             }
 
-            /* ------------------------------------------------------------------
-           5. HEADER & NAVIGATION (REFINED)
-           ------------------------------------------------------------------
-        */
+            @media (min-width: 1025px) {
+                #cursor-dot {
+                    display: block;
+                    width: 8px;
+                    height: 8px;
+                    background: #fff;
+                }
+                #cursor-outline {
+                    display: block;
+                    width: 40px;
+                    height: 40px;
+                    border: 1px solid var(--gold);
+                    transition: transform 0.15s ease-out;
+                }
+            }
+
+            /* Header Section */
             header {
                 position: sticky;
                 top: 0;
                 width: 100%;
                 z-index: 1000;
-                padding: 20px 6%;
-                background: rgba(2, 3, 5, 0.85);
-                backdrop-filter: blur(25px);
+                padding: 15px 6%;
+                background: rgba(10, 11, 16, 0.85);
+                backdrop-filter: blur(20px);
                 border-bottom: 1px solid var(--border);
                 display: flex;
                 justify-content: space-between;
@@ -148,106 +128,61 @@
                 gap: 15px;
             }
             .logo-box img {
-                height: 55px;
-                filter: drop-shadow(0 0 15px var(--neon-gold));
-                transition: 0.5s var(--cubic);
-            }
-            .logo-box:hover img {
-                transform: rotate(360deg) scale(1.1);
+                height: 50px;
+                filter: drop-shadow(0 0 10px var(--neon-gold));
             }
 
             .nav-links {
                 display: flex;
                 list-style: none;
-                gap: 40px;
+                gap: 30px;
             }
-            .nav-links li a {
+            @media (max-width: 768px) {
+                .nav-links {
+                    display: none;
+                }
+            }
+
+            .nav-links a {
                 text-decoration: none;
                 color: #888;
                 font-size: 16px;
-                font-weight: 500;
-                transition: 0.4s;
+                transition: 0.3s;
                 position: relative;
             }
-            .nav-links li a::after {
-                content: "";
-                position: absolute;
-                bottom: -5px;
-                left: 0;
-                width: 0;
-                height: 2px;
-                background: var(--gold);
-                transition: 0.4s;
-            }
-            .nav-links li a:hover {
-                color: #fff;
-            }
-            .nav-links li a:hover::after {
-                width: 100%;
+            .nav-links a:hover {
+                color: var(--gold);
             }
 
-            .auth-btn {
-                background: linear-gradient(45deg, var(--gold), #9e5a1a);
-                color: white;
-                padding: 12px 30px;
-                border-radius: 50px;
-                font-weight: 800;
-                text-decoration: none;
-                border: 1px solid var(--border);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-                transition: 0.4s;
-            }
-            .auth-btn:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 15px 30px var(--neon-gold);
-            }
-
-            /* ------------------------------------------------------------------
-           6. HERO SECTION (ULTRA-MODERN)
-           ------------------------------------------------------------------
-        */
+            /* Hero Section */
             .hero {
-                min-height: 100vh;
-                padding: 120px 6% 60px;
+                min-height: 90vh;
+                padding: 80px 6% 40px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                position: relative;
             }
 
             .badge-new {
-                background: rgba(204, 119, 34, 0.1);
+                background: rgba(212, 175, 55, 0.1);
                 border: 1px solid var(--gold);
                 padding: 6px 20px;
                 border-radius: 50px;
                 color: var(--gold);
-                font-size: 12px;
-                letter-spacing: 2px;
-                margin-bottom: 30px;
+                font-size: 13px;
                 text-transform: uppercase;
+                letter-spacing: 2px;
+                margin-bottom: 25px;
                 animation: pulse 2s infinite;
             }
 
-            @keyframes pulse {
-                0% {
-                    opacity: 0.6;
-                }
-                50% {
-                    opacity: 1;
-                }
-                100% {
-                    opacity: 0.6;
-                }
-            }
-
             .hero h1 {
-                font-size: clamp(45px, 10vw, 95px);
+                font-size: clamp(35px, 8vw, 90px);
                 font-weight: 900;
-                line-height: 1;
-                margin-bottom: 40px;
-                letter-spacing: -2px;
-                background: linear-gradient(to bottom, #fff, #888);
+                line-height: 1.1;
+                margin-bottom: 35px;
+                background: linear-gradient(to bottom, #fff 40%, var(--gold));
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
@@ -255,141 +190,121 @@
             .hero-desc-card {
                 background: var(--glass);
                 border: 1px solid var(--border);
-                padding: 50px;
-                border-radius: 40px;
+                padding: clamp(20px, 5vw, 50px);
+                border-radius: 35px;
                 max-width: 900px;
-                backdrop-filter: blur(20px);
-                margin-bottom: 60px;
-                transform: perspective(1000px) rotateX(10deg);
-                transition: 0.8s var(--cubic);
+                backdrop-filter: blur(15px);
+                margin-bottom: 50px;
+                transition: 0.6s var(--cubic);
             }
-            .hero-desc-card:hover {
-                transform: perspective(1000px) rotateX(0deg);
-                border-color: var(--gold);
+
+            @media (min-width: 1025px) {
+                .hero-desc-card {
+                    transform: perspective(1000px) rotateX(8deg);
+                }
+                .hero-desc-card:hover {
+                    transform: perspective(1000px) rotateX(0deg);
+                    border-color: var(--gold);
+                }
             }
 
             .hero-desc-card p {
-                font-size: 22px;
+                font-size: clamp(17px, 2vw, 22px);
                 color: #ccc;
-                line-height: 1.8;
             }
 
+            /* Buttons */
             .cta-container {
                 display: flex;
-                gap: 25px;
-                margin-bottom: 100px;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: center;
+                margin-bottom: 80px;
             }
+
             .btn-xl {
-                padding: 20px 50px;
+                padding: 18px 40px;
                 border-radius: 100px;
                 text-decoration: none;
                 font-weight: 800;
-                font-size: 18px;
-                transition: 0.5s;
+                font-size: 17px;
+                transition: 0.4s;
+                text-align: center;
+                min-width: 220px;
             }
+
             .btn-gold-fill {
                 background: var(--gold);
-                color: #fff;
+                color: #000;
+                box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
             }
             .btn-outline-glass {
                 border: 1px solid var(--border);
                 color: #fff;
                 background: var(--glass);
             }
+
             .btn-xl:hover {
-                transform: scale(1.05) translateY(-5px);
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                transform: translateY(-5px) scale(1.02);
             }
 
-            /* ------------------------------------------------------------------
-           7. PREMIUM DASHBOARD GRID
-           ------------------------------------------------------------------
-        */
+            /* Dashboard Grid */
             .dashboard-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-                gap: 25px;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
                 width: 100%;
                 max-width: 1200px;
-                margin-top: 50px;
             }
 
             .stat-card {
                 background: var(--glass);
                 border: 1px solid var(--border);
-                padding: 40px;
-                border-radius: 35px;
-                text-align: left;
-                position: relative;
-                overflow: hidden;
-                transition: 0.5s var(--cubic);
+                padding: 35px 20px;
+                border-radius: 30px;
+                transition: 0.4s;
             }
             .stat-card:hover {
                 background: rgba(255, 255, 255, 0.05);
-                transform: translateY(-10px);
+                border-color: var(--gold);
             }
-
-            .stat-card::before {
-                content: "";
-                position: absolute;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background: radial-gradient(
-                    circle,
-                    var(--neon-gold),
-                    transparent 70%
-                );
-                opacity: 0;
-                transition: 0.5s;
-            }
-            .stat-card:hover::before {
-                opacity: 0.1;
-            }
-
             .stat-card h3 {
-                font-size: 55px;
+                font-size: clamp(35px, 4vw, 50px);
                 color: var(--gold);
                 margin-bottom: 10px;
-                font-family: sans-serif;
             }
             .stat-card p {
+                font-size: 13px;
                 color: #888;
                 text-transform: uppercase;
-                letter-spacing: 3px;
-                font-size: 13px;
+                letter-spacing: 2px;
             }
 
-            /* ------------------------------------------------------------------
-           8. FEATURES / NEWS TICKER
-           ------------------------------------------------------------------
-        */
+            /* News Section */
             .news-section {
-                padding: 100px 6%;
-                background: rgba(255, 255, 255, 0.01);
-                border-top: 1px solid var(--border);
+                padding: 80px 6%;
             }
             .section-tag {
                 color: var(--gold);
-                font-weight: bold;
+                font-weight: 800;
                 text-transform: uppercase;
-                letter-spacing: 5px;
-                margin-bottom: 20px;
+                letter-spacing: 4px;
                 display: block;
+                margin-bottom: 15px;
             }
             .section-title {
-                font-size: 50px;
-                margin-bottom: 60px;
+                font-size: clamp(28px, 4vw, 45px);
+                margin-bottom: 50px;
             }
 
             .news-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-                gap: 30px;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 25px;
             }
+
             .news-item {
-                height: 450px;
+                height: 400px;
                 border-radius: 40px;
                 background-size: cover;
                 background-position: center;
@@ -397,41 +312,38 @@
                 overflow: hidden;
                 display: flex;
                 align-items: flex-end;
-                padding: 40px;
+                padding: 35px;
                 border: 1px solid var(--border);
-                transition: 0.6s var(--cubic);
+                transition: 0.5s;
             }
+
             .news-item::after {
                 content: "";
                 position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
+                inset: 0;
                 background: linear-gradient(
                     to top,
-                    var(--bg-dark),
+                    var(--bg-dark) 20%,
                     transparent
                 );
             }
+
             .news-content {
                 position: relative;
                 z-index: 10;
             }
-            .news-item:hover {
-                transform: scale(0.98);
-                border-color: var(--gold);
+            .news-content h3 {
+                color: var(--gold);
+                font-size: 24px;
+                margin-bottom: 10px;
             }
 
-            /* ------------------------------------------------------------------
-           9. FOOTER SYSTEM
-           ------------------------------------------------------------------
-        */
+            /* Footer */
             footer {
                 padding: 80px 6%;
                 border-top: 1px solid var(--border);
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                 gap: 50px;
             }
             .footer-col h4 {
@@ -439,40 +351,55 @@
                 margin-bottom: 25px;
                 font-size: 20px;
             }
+            .footer-col p,
+            .footer-col li {
+                color: #777;
+                font-size: 15px;
+            }
             .footer-col ul {
                 list-style: none;
             }
-            .footer-col ul li {
+            .footer-col li {
                 margin-bottom: 12px;
             }
-            .footer-col ul li a {
-                color: #666;
+            .footer-col a {
+                color: inherit;
                 text-decoration: none;
                 transition: 0.3s;
             }
-            .footer-col ul li a:hover {
+            .footer-col a:hover {
                 color: #fff;
-                padding-left: 10px;
+                padding-left: 5px;
             }
 
             .copyright {
-                padding: 40px 6%;
-                text-align: center;
+                padding: 40px;
                 border-top: 1px solid var(--border);
+                text-align: center;
                 color: #444;
                 font-size: 14px;
             }
 
-            /* ------------------------------------------------------------------
-           10. ADVANCED RESPONSIVENESS
-           ------------------------------------------------------------------
-        */
-            @media (max-width: 992px) {
-                .nav-links {
-                    display: none;
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 0.7;
                 }
-                .hero h1 {
-                    font-size: 60px;
+                50% {
+                    opacity: 1;
+                }
+            }
+
+            /* Responsive Adjustments */
+            @media (max-width: 480px) {
+                .hero {
+                    padding-top: 50px;
+                }
+                .btn-xl {
+                    width: 100%;
+                }
+                .news-item {
+                    height: 320px;
                 }
             }
         </style>
@@ -480,13 +407,15 @@
     <body>
         <div id="cursor-dot"></div>
         <div id="cursor-outline"></div>
+
         <canvas id="canvas-bg"></canvas>
         <div class="ambient-layer"></div>
+
         <div
             class="floating-orb"
             style="
-                width: 500px;
-                height: 500px;
+                width: 40vw;
+                height: 40vw;
                 background: var(--gold);
                 top: -10%;
                 left: -5%;
@@ -495,21 +424,21 @@
         <div
             class="floating-orb"
             style="
-                width: 400px;
-                height: 400px;
+                width: 35vw;
+                height: 35vw;
                 background: var(--deep-red);
-                bottom: 10%;
-                right: 5%;
+                bottom: 5%;
+                right: -5%;
+                animation-delay: -5s;
             "
         ></div>
 
         <header>
             <div class="logo-box">
-                <img src="pawlos.png" alt="Church Logo" />
+                <img src="pawlos.png" alt="Logo" />
                 <div
-                    class="logo-text"
                     style="
-                        font-size: 24px;
+                        font-size: 22px;
                         font-weight: 800;
                         color: var(--gold);
                     "
@@ -525,10 +454,7 @@
         <main>
             <section class="hero">
                 <span class="badge-new">የአንድነት እና የሶስትነት ምስክር!</span>
-                <h1>
-                    ወልድያ ደብረ ብርሀን <br />
-                    ቅድስት ሥላሴ
-                </h1>
+                <h1>ወልድያ ደብረ ብርሀን <br />ቅድስት ሥላሴ</h1>
 
                 <div class="hero-desc-card" id="tilt-card">
                     <p>
@@ -552,10 +478,9 @@
                         <h3>80+</h3>
                         <p>ንቁ አባላት</p>
                     </div>
-                    <div class="stat-card"></div>
                     <div class="stat-card">
                         <h3>70+</h3>
-                        <p>ህጻናት እና መአከላዊያን ተማሪዎች</p>
+                        <p>ተማሪዎች</p>
                     </div>
                     <div class="stat-card">
                         <h3 id="visitor-count">0</h3>
@@ -576,7 +501,7 @@
                     >
                         <div class="news-content">
                             <h3>የዲጂታል ቤተ-መጽሐፍት</h3>
-                            <p>ጥንታዊ የብራና መጻሕፍት በዲጂታል መልክ።</p>
+                            <p>ጥንታዊ የብራና መጻሕፍት በዲጂታል መልክ የቀረቡበት።</p>
                         </div>
                     </div>
                     <div
@@ -587,10 +512,7 @@
                     >
                         <div class="news-content">
                             <h3>ስነ-ፍጥረት</h3>
-                            <p>
-                                የእግዚ አብሄር ዘመን የማይለውጣቸው ምህንድስናዎች የማይለወጡ የማይደረስበት
-                                ቀመርና ጥበብ።
-                            </p>
+                            <p>የእግዚአብሔር ዘመን የማይለውጣቸው ምህንድስናዎችና ጥበብ።</p>
                         </div>
                     </div>
                 </div>
@@ -600,9 +522,7 @@
         <footer>
             <div class="footer-col">
                 <h4>ስለ እኛ</h4>
-                <p style="color: #555">
-                    ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ ሰንበት ትምህርት ቤት - የሚዲያና መረጃ ክፍል
-                </p>
+                <p>ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ ሰንበት ትምህርት ቤት - የሚዲያና መረጃ ክፍል</p>
             </div>
             <div class="footer-col">
                 <h4>ፈጣን ሊንኮች</h4>
@@ -610,49 +530,28 @@
                     <li><a href="#">ዝማሬዎች</a></li>
                     <li><a href="#">ትምህርተ ሃይማኖት</a></li>
                     <li><a href="#">ስርአተ ቅዳሴ</a></li>
-                    <li><a href="#">ግዕዝ ቋንቋ</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>ያግኙን</h4>
-                <p style="color: #555">ወልድያ፣ ኢትዮጵያ</p>
-                <p style="color: #555">Email: tekleslase725.com</p>
+                <p>ወልድያ፣ ኢትዮጵያ<br />Email: tekleslase725.com</p>
             </div>
         </footer>
 
         <div class="copyright">
-            &copy; 2026 ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ ሰንበት ትምህርት ቤት | Developed by
-            Media Dept
+            &copy; 2026 ወልድያ ደብረ ብርሀን ቅድስት ሥላሴ | Developed by Media Dept
         </div>
 
         <script>
-            // A. Custom Cursor Logic
-            const dot = document.getElementById("cursor-dot");
-            const outline = document.getElementById("cursor-outline");
-
-            window.addEventListener("mousemove", (e) => {
-                dot.style.left = e.clientX + "px";
-                dot.style.top = e.clientY + "px";
-
-                outline.animate(
-                    {
-                        left: e.clientX + "px",
-                        top: e.clientY + "px",
-                    },
-                    { duration: 500, fill: "forwards" },
-                );
-            });
-
-            // B. Canvas Particle System
+            // 1. Particle Background System
             const canvas = document.getElementById("canvas-bg");
             const ctx = canvas.getContext("2d");
             let particles = [];
-
             function resize() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             }
-            window.onresize = resize;
+            window.addEventListener("resize", resize);
             resize();
 
             class Particle {
@@ -660,8 +559,8 @@
                     this.x = Math.random() * canvas.width;
                     this.y = Math.random() * canvas.height;
                     this.size = Math.random() * 1.5;
-                    this.speedX = Math.random() * 0.5 - 0.25;
-                    this.speedY = Math.random() * 0.5 - 0.25;
+                    this.speedX = Math.random() * 0.3 - 0.15;
+                    this.speedY = Math.random() * 0.3 - 0.15;
                 }
                 update() {
                     this.x += this.speedX;
@@ -672,66 +571,53 @@
                     if (this.y < 0) this.y = canvas.height;
                 }
                 draw() {
-                    ctx.fillStyle = "rgba(204, 119, 34, 0.3)";
+                    ctx.fillStyle = "rgba(212, 175, 55, 0.2)";
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
-
-            function initParticles() {
-                for (let i = 0; i < 100; i++) particles.push(new Particle());
-            }
-
-            function animateParticles() {
+            for (let i = 0; i < 70; i++) particles.push(new Particle());
+            function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach((p) => {
                     p.update();
                     p.draw();
                 });
-                requestAnimationFrame(animateParticles);
+                requestAnimationFrame(animate);
             }
-            initParticles();
-            animateParticles();
+            animate();
 
-            // C. Tilt Effect Logic
-            const card = document.getElementById("tilt-card");
-            card.addEventListener("mousemove", (e) => {
-                let rect = card.getBoundingClientRect();
-                let x = e.clientX - rect.left;
-                let y = e.clientY - rect.top;
-                let centerX = rect.width / 2;
-                let centerY = rect.height / 2;
-                let rotateX = (y - centerY) / 20;
-                let rotateY = (centerX - x) / 20;
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-            card.addEventListener("mouseleave", () => {
-                card.style.transform = `perspective(1000px) rotateX(10deg) rotateY(0deg)`;
-            });
+            // 2. Cursor (Desktop Only)
+            const dot = document.getElementById("cursor-dot");
+            const outline = document.getElementById("cursor-outline");
+            if (window.matchMedia("(min-width: 1025px)").matches) {
+                window.addEventListener("mousemove", (e) => {
+                    dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+                    outline.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+                });
+            }
 
-            // D. Smart Visitor Counter
-            function startCounter() {
-                let count = localStorage.getItem("vCount") || 750;
-                count = parseInt(count) + 1;
+            // 3. Counter Animation
+            window.onload = () => {
+                let count =
+                    parseInt(localStorage.getItem("vCount") || 1420) + 1;
                 localStorage.setItem("vCount", count);
-
                 const el = document.getElementById("visitor-count");
-                let current = 0;
-                const step = Math.ceil(count / 100);
+                let curr = 0;
+                const step = Math.ceil(count / 60);
                 const timer = setInterval(() => {
-                    current += step;
-                    if (current >= count) {
+                    curr += step;
+                    if (curr >= count) {
                         el.innerText = count.toLocaleString();
                         clearInterval(timer);
                     } else {
-                        el.innerText = current.toLocaleString();
+                        el.innerText = curr.toLocaleString();
                     }
-                }, 20);
-            }
-            window.onload = startCounter;
+                }, 25);
+            };
 
-            // E. Intersection Observer for Reveals
+            // 4. Scroll Reveal
             const observer = new IntersectionObserver(
                 (entries) => {
                     entries.forEach((entry) => {
@@ -745,10 +631,10 @@
             );
 
             document
-                .querySelectorAll(".stat-card, .news-item")
+                .querySelectorAll(".stat-card, .news-item, .hero-desc-card")
                 .forEach((el) => {
                     el.style.opacity = "0";
-                    el.style.transform = "translateY(40px)";
+                    el.style.transform = "translateY(30px)";
                     el.style.transition = "1s var(--cubic)";
                     observer.observe(el);
                 });
