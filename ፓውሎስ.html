@@ -3,34 +3,32 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta
-            name="description"
-            content="Digital Hymn Archive for Orthodox Tewahedo Songs"
-        />
-        <title>የዝማሬ ማጥኛ - Ultramodern Edition</title>
-
+        <title>የዝማሬ ማጥኛ - Advanced Master Edition</title>
         <style>
-            /* ========================================
-           I. CSS VARIABLES & THEMING
-           ========================================
-        */
+            /* ---------------------------------------------------------
+           I. CORE SYSTEM & THEME DEFINITIONS
+           --------------------------------------------------------- */
             :root {
-                --dark-bg: #030305;
-                --glass-bg: rgba(255, 255, 255, 0.03);
-                --glass-border: rgba(255, 255, 255, 0.08);
-                --resurrection-gold: #ffd700;
-                --resurrection-glow: rgba(255, 215, 0, 0.2);
-                --ascension-blue: #00e5ff;
-                --ascension-glow: rgba(0, 229, 255, 0.3);
-                --text-main: #ffffff;
-                --text-dim: #a0a0a0;
-                --transition-smooth: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+                --gold: #ffd700;
+                --blue: #00f2ff;
+                --deep-space: #05050a;
+                --card-glass: rgba(255, 255, 255, 0.03);
+                --border-glass: rgba(255, 255, 255, 0.08);
+                --ethio-font: "Nyala", "Kefa", "Segoe UI", sans-serif;
+                --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             }
 
-            /* ========================================
-           II. RESET & GLOBAL STYLES
-           ========================================
-        */
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            ::-webkit-scrollbar-track {
+                background: var(--deep-space);
+            }
+            ::-webkit-scrollbar-thumb {
+                background: linear-gradient(var(--gold), var(--blue));
+                border-radius: 20px;
+            }
+
             * {
                 margin: 0;
                 padding: 0;
@@ -39,241 +37,97 @@
             }
 
             body {
-                background-color: var(--dark-bg);
-                color: var(--text-main);
-                font-family: "Nyala", "Kefa", "Segoe UI", sans-serif;
+                background-color: var(--deep-space);
+                color: #ffffff;
+                font-family: var(--ethio-font);
                 overflow-x: hidden;
-                line-height: 1.8;
-                -webkit-font-smoothing: antialiased;
+                background-attachment: fixed;
             }
 
-            /* ========================================
-           III. DYNAMIC BACKGROUND ENGINE
-           ========================================
-        */
-            .bg-orbs {
+            /* ---------------------------------------------------------
+           II. DYNAMIC BACKGROUND (PARTICLES)
+           --------------------------------------------------------- */
+            #particle-canvas {
                 position: fixed;
                 top: 0;
                 left: 0;
-                width: 100vw;
-                height: 100vh;
-                z-index: -2;
-                pointer-events: none;
-                overflow: hidden;
-            }
-
-            .orb {
-                position: absolute;
-                border-radius: 50%;
-                filter: blur(140px);
-                opacity: 0.12;
-                animation: float 25s infinite alternate ease-in-out;
-            }
-
-            .orb-1 {
-                top: -10%;
-                left: -10%;
-                width: 65vw;
-                height: 65vw;
-                background: var(--resurrection-gold);
-            }
-
-            .orb-2 {
-                bottom: -15%;
-                right: -10%;
-                width: 75vw;
-                height: 75vw;
-                background: var(--ascension-blue);
-                animation-delay: -7s;
-            }
-
-            .orb-3 {
-                top: 40%;
-                left: 30%;
-                width: 30vw;
-                height: 30vw;
-                background: #ff00ff;
-                opacity: 0.05;
-                animation-duration: 40s;
-            }
-
-            @keyframes float {
-                0% {
-                    transform: translate(0, 0) scale(1) rotate(0deg);
-                }
-                50% {
-                    transform: translate(100px, 50px) scale(1.1) rotate(45deg);
-                }
-                100% {
-                    transform: translate(-50px, 80px) scale(0.9) rotate(90deg);
-                }
-            }
-
-            /* ========================================
-           IV. NAVIGATION SYSTEM
-           ========================================
-        */
-            nav {
-                position: fixed;
-                top: 25px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(5, 5, 10, 0.8);
-                backdrop-filter: blur(30px);
-                -webkit-backdrop-filter: blur(30px);
-                border: 1px solid var(--glass-border);
-                border-radius: 50px;
-                padding: 14px 40px;
-                display: flex;
-                gap: 30px;
-                z-index: 1000;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
-                transition: 0.5s;
-            }
-
-            nav a {
-                color: var(--text-dim);
-                text-decoration: none;
-                font-weight: 600;
-                font-size: 15px;
-                letter-spacing: 1px;
-                transition: 0.4s;
-                position: relative;
-            }
-
-            nav a::after {
-                content: "";
-                position: absolute;
-                bottom: -5px;
-                left: 0;
-                width: 0;
-                height: 2px;
-                background: var(--resurrection-gold);
-                transition: 0.3s;
-            }
-
-            nav a:hover::after {
                 width: 100%;
-            }
-            nav a:hover,
-            nav a.active {
-                color: var(--resurrection-gold);
-                text-shadow: 0 0 15px var(--resurrection-gold);
+                height: 100%;
+                z-index: -1;
+                pointer-events: none;
             }
 
-            /* ========================================
-           V. HERO & LOGO ARCHITECTURE
-           ========================================
-        */
-            .hero {
-                text-align: center;
-                padding: 160px 20px 20px;
-                position: relative;
-            }
-
-            .hero h1 {
-                font-size: clamp(40px, 10vw, 75px);
-                margin: 0;
-                background: linear-gradient(
-                    to right,
-                    #fff,
-                    var(--resurrection-gold),
-                    var(--ascension-blue),
-                    #fff
+            .bg-glow {
+                position: fixed;
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(
+                    circle,
+                    rgba(255, 215, 0, 0.05) 0%,
+                    transparent 70%
                 );
-                background-size: 200% auto;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                font-weight: 900;
-                animation: shine 8s linear infinite;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: -1;
+                transition: transform 0.2s ease-out;
             }
 
-            @keyframes shine {
-                to {
-                    background-position: 200% center;
-                }
-            }
-
-            .logo-showcase {
+            /* ---------------------------------------------------------
+           III. ADVANCED CIRCULAR LOGO SYSTEM
+           --------------------------------------------------------- */
+            .header-section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 80px 20px 40px;
                 position: relative;
-                height: 400px;
+            }
+
+            .logo-aura {
+                position: relative;
+                width: 260px;
+                height: 260px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                margin: 20px 0 60px;
-                perspective: 1500px;
+                perspective: 1000px;
             }
 
-            .logo-container {
-                position: relative;
-                width: 280px;
-                height: 280px;
-                background: rgba(255, 255, 255, 0.02);
-                backdrop-filter: blur(20px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                animation: morphing 10s ease-in-out infinite alternate;
-                z-index: 10;
-                box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-            }
-
-            .main-logo {
-                width: 180px;
-                height: 180px;
-                object-fit: contain;
-                filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.4));
-                transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                z-index: 11;
-            }
-
-            .logo-container:hover .main-logo {
-                transform: scale(1.1) rotate(5deg) translateZ(50px);
-            }
-
-            .spinning-ring {
+            .logo-circle-border {
                 position: absolute;
+                width: 100%;
+                height: 100%;
                 border-radius: 50%;
                 border: 2px solid transparent;
-                animation: spin 15s linear infinite;
-                opacity: 0.5;
+                border-top: 2px solid var(--gold);
+                border-bottom: 2px solid var(--blue);
+                animation: rotateSpin 10s linear infinite;
             }
 
-            .ring-1 {
-                width: 340px;
-                height: 340px;
-                border-top-color: var(--resurrection-gold);
-                border-bottom-color: var(--resurrection-gold);
-                box-shadow: 0 0 20px var(--resurrection-glow);
+            .inner-logo-box {
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.02);
+                backdrop-filter: blur(15px);
+                border: 1px solid var(--border-glass);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+                transition: var(--transition);
             }
 
-            .ring-2 {
-                width: 380px;
-                height: 380px;
-                border-left-color: var(--ascension-blue);
-                border-right-color: var(--ascension-blue);
-                animation-duration: 25s;
-                animation-direction: reverse;
-                box-shadow: 0 0 20px var(--ascension-glow);
+            .logo-img {
+                width: 85%;
+                height: 85%;
+                object-fit: contain;
+                border-radius: 50%;
+                filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
             }
 
-            @keyframes morphing {
-                0% {
-                    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-                }
-                34% {
-                    border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
-                }
-                67% {
-                    border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
-                }
-                100% {
-                    border-radius: 60% 40% 30% 70% / 50% 60% 40% 60%;
-                }
-            }
-
-            @keyframes spin {
+            @keyframes rotateSpin {
                 from {
                     transform: rotate(0deg);
                 }
@@ -282,363 +136,517 @@
                 }
             }
 
-            /* ========================================
-           VI. CONTENT LAYOUT (CONTAINER)
-           ========================================
-        */
-            .container {
-                max-width: 1000px;
-                margin: 0 auto;
-                padding: 0 30px;
-                position: relative;
+            /* ---------------------------------------------------------
+           IV. NAVIGATION & TYPOGRAPHY
+           --------------------------------------------------------- */
+            nav {
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(10, 10, 15, 0.8);
+                backdrop-filter: blur(20px);
+                padding: 12px 40px;
+                border-radius: 100px;
+                border: 1px solid var(--border-glass);
+                display: flex;
+                gap: 30px;
+                z-index: 1000;
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
             }
 
-            .section-title {
-                font-size: 2.8rem;
-                margin: 100px 0 50px;
+            nav a {
+                color: #888;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 15px;
+                transition: 0.3s;
+            }
+            nav a.active {
+                color: var(--gold);
+                text-shadow: 0 0 10px var(--gold);
+            }
+
+            .hero-title {
                 text-align: center;
+                margin-top: 20px;
+            }
+            .hero-title h1 {
+                font-size: clamp(32px, 8vw, 65px);
+                font-weight: 900;
+                background: linear-gradient(to bottom, #ffffff, #888888);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            /* ---------------------------------------------------------
+           V. HYMN CARDS GRID ARCHITECTURE
+           --------------------------------------------------------- */
+            .main-container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 60px 20px 150px;
+            }
+
+            .section-divider {
+                margin: 100px 0 50px;
                 display: flex;
                 align-items: center;
-                justify-content: center;
                 gap: 20px;
-                opacity: 0;
-                transform: translateY(20px);
-                transition: 1s;
             }
-
-            .section-title.visible {
-                opacity: 1;
-                transform: translateY(0);
+            .section-divider h2 {
+                font-size: 2.2rem;
+                white-space: nowrap;
+                color: #fff;
             }
-
-            .section-title::before,
-            .section-title::after {
-                content: "";
+            .line {
                 height: 1px;
-                width: 100px;
-                background: linear-gradient(
-                    90deg,
-                    transparent,
-                    var(--resurrection-gold),
-                    transparent
-                );
+                width: 100%;
+                background: linear-gradient(to right, var(--gold), transparent);
             }
 
-            /* ========================================
-           VII. HYMN CARD SYSTEM
-           ========================================
-        */
-            .song-card {
-                background: var(--glass-bg);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                border: 1px solid var(--glass-border);
-                border-radius: 30px;
+            .hymn-card {
+                background: var(--card-glass);
+                border: 1px solid var(--border-glass);
+                border-radius: 40px;
                 padding: 45px;
-                margin-bottom: 50px;
-                transform: translateY(60px);
+                margin-bottom: 40px;
+                backdrop-filter: blur(10px);
+                transition: var(--transition);
+                transform: translateY(30px);
                 opacity: 0;
-                transition: var(--transition-smooth);
                 position: relative;
                 overflow: hidden;
             }
 
-            .song-card::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 4px;
-                height: 100%;
-                background: var(--resurrection-gold);
-                opacity: 0.5;
-            }
-
-            .theme-asc .song-card::before {
-                background: var(--ascension-blue);
-            }
-
-            .song-card.visible {
+            .hymn-card.reveal {
                 transform: translateY(0);
                 opacity: 1;
             }
-
-            .song-card:hover {
-                border-color: rgba(255, 255, 255, 0.2);
-                background: rgba(255, 255, 255, 0.06);
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            .hymn-card:hover {
+                border-color: rgba(255, 215, 0, 0.3);
+                transform: translateY(-10px) scale(1.01);
             }
 
-            .song-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-                padding-bottom: 20px;
-                margin-bottom: 30px;
+            .hymn-card.active-play {
+                border-color: var(--gold);
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+                background: rgba(255, 215, 0, 0.02);
             }
 
-            .song-title {
-                font-size: 1.8rem;
+            .hymn-meta {
+                font-size: 0.9rem;
+                color: var(--gold);
+                letter-spacing: 2px;
+                margin-bottom: 15px;
+                opacity: 0.7;
+            }
+            .hymn-name {
+                font-size: 2rem;
                 font-weight: 800;
-                color: var(--resurrection-gold);
-                letter-spacing: 1px;
+                margin-bottom: 30px;
+                line-height: 1.2;
             }
 
-            .theme-asc .song-title {
-                color: var(--ascension-blue);
-            }
-
-            .lyrics {
-                font-size: clamp(24px, 6vw, 32px);
+            .lyrics-box {
+                font-size: 1.9rem;
+                line-height: 1.5;
                 text-align: center;
-                margin-bottom: 35px;
-                font-weight: 700;
-                color: #eee;
-                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+                margin: 30px 0;
+                font-weight: 600;
+                color: #f0f0f0;
             }
 
             .translation-box {
                 background: rgba(0, 0, 0, 0.4);
                 padding: 25px;
                 border-radius: 20px;
-                color: #ccc;
+                color: #b0b0b0;
                 font-style: italic;
-                border-left: 3px solid rgba(255, 255, 255, 0.1);
-                font-size: 1.1rem;
                 line-height: 1.6;
+                font-size: 1.1rem;
+                border-left: 3px solid var(--gold);
             }
 
-            /* ========================================
-           VIII. AUDIO PLAYER CUSTOMIZATION
-           ========================================
-        */
-            .audio-player {
+            /* Advanced Player Design */
+            .player-wrapper {
                 margin-top: 40px;
-                background: rgba(0, 0, 0, 0.3);
-                border-radius: 60px;
-                padding: 12px;
-                display: flex;
-                align-items: center;
-                border: 1px solid var(--glass-border);
+                background: #000;
+                padding: 10px 20px;
+                border-radius: 100px;
+                border: 1px solid var(--border-glass);
             }
-
             audio {
                 width: 100%;
-                height: 45px;
-                filter: invert(100%) hue-rotate(180deg) brightness(1.8);
-                outline: none;
+                height: 40px;
+                filter: invert(1) hue-rotate(180deg) brightness(1.2);
             }
 
-            /* ========================================
-           IX. FOOTER & MISC
-           ========================================
-        */
             footer {
                 text-align: center;
-                padding: 100px 20px;
-                color: #444;
-                font-size: 14px;
-                letter-spacing: 2px;
-                text-transform: uppercase;
+                padding: 80px 20px;
+                color: #555;
+                font-size: 13px;
+                letter-spacing: 1px;
             }
 
-            /* Media Queries for Mobile Responsiveness */
+            /* ---------------------------------------------------------
+           VI. MOBILE OPTIMIZATION
+           --------------------------------------------------------- */
             @media (max-width: 768px) {
+                .hymn-card {
+                    padding: 30px 20px;
+                }
+                .lyrics-box {
+                    font-size: 1.4rem;
+                }
+                .hymn-name {
+                    font-size: 1.6rem;
+                }
                 nav {
                     width: 90%;
-                    padding: 10px 20px;
                     gap: 15px;
-                }
-                .hero {
-                    padding-top: 120px;
-                }
-                .logo-container {
-                    width: 200px;
-                    height: 200px;
-                }
-                .main-logo {
-                    width: 130px;
-                    height: 130px;
-                }
-                .ring-1 {
-                    width: 250px;
-                    height: 250px;
-                }
-                .ring-2 {
-                    width: 280px;
-                    height: 280px;
-                }
-                .song-card {
-                    padding: 25px;
-                }
-                .lyrics {
-                    font-size: 22px;
+                    padding: 10px 20px;
                 }
             }
         </style>
     </head>
     <body>
-        <div class="bg-orbs">
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            <div class="orb orb-3"></div>
-        </div>
+        <div id="particle-canvas"></div>
+        <div class="bg-glow" id="mouse-glow"></div>
 
-        <nav id="mainNav">
-            <a href="index.html">⌂ መነሻ</a>
-            <a href="#resurrection">ትንሣኤ</a>
+        <nav id="floating-nav">
+            <a href="#resurrection" class="active">ትንሣኤ</a>
             <a href="#ascension">እርገት</a>
-            <a href="#about">መረጃ</a>
+            <a href="#" onclick="window.scrollTo(0, 0)">🔝</a>
         </nav>
 
-        <header class="hero">
-            <h1 id="mainTitle">የዝማሬ ማጥኛ ገጽ</h1>
-            <p
-                style="
-                    color: #666;
-                    margin-top: 15px;
-                    letter-spacing: 3px;
-                    font-weight: bold;
-                "
-            >
-                WOLDIA HOLY TRINITY SUNDAY SCHOOL
-            </p>
+        <header class="header-section">
+            <div class="logo-aura" id="tilt-logo">
+                <div class="logo-circle-border"></div>
+                <div class="inner-logo-box">
+                    <img
+                        src="pawlos.png"
+                        alt="Logo"
+                        class="logo-img"
+                        onerror="
+                            this.src =
+                                'https://cdn-icons-png.flaticon.com/512/2566/2566444.png'
+                        "
+                    />
+                </div>
+            </div>
+            <div class="hero-title">
+                <h1>የዝማሬ ማጥኛ ማዕከል</h1>
+                <p
+                    style="
+                        color: var(--gold);
+                        letter-spacing: 5px;
+                        font-weight: bold;
+                        margin-top: 10px;
+                    "
+                >
+                    HOLY TRINITY | MEDIA
+                </p>
+            </div>
         </header>
 
-        <div class="logo-showcase">
-            <div class="spinning-ring ring-1"></div>
-            <div class="spinning-ring ring-2"></div>
-            <div class="logo-container">
-                <img src="pawlos.png" alt="Church Logo" class="main-logo" />
-            </div>
-        </div>
+        <main class="main-container">
+            <section id="resurrection">
+                <div class="section-divider">
+                    <h2>☀️ የትንሣኤ መዝሙራት</h2>
+                    <div class="line"></div>
+                </div>
 
-        <main class="container">
-            <section id="resurrection" class="theme-res">
-                <h2 class="section-title">☀️ የትንሣኤ መዝሙራት</h2>
-
-                <article class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፩. ክርስቶስ ትንሥአ</div>
-                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
-                    </div>
-                    <div class="lyrics">
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-01 | RESURRECTION</div>
+                    <h3 class="hymn-name">፩. ክርስቶስ ትንሥአ</h3>
+                    <div class="lyrics-box">
                         ክርስቶስ ትንሥአ እሙታን በዐቢይ ኃይል ወሥልጣን፤<br />
                         አሰሮ ለሰይጣን አግዐዞ ለአዳም ሰላም እምይእዜሰ ይኩን ሰላም፡፡
                     </div>
                     <div class="translation-box">
-                        <strong>ትርጉም፦</strong> ክርስቶስ በታላቅ ኃይልና ሥልጣን ከሙታን ተለይቶ
+                        <strong>ትርጉም:</strong> ክርስቶስ በታላቅ ኃይልና ሥልጣን ከሙታን ተለይቶ
                         ተነሣ፤ ሰይጣንን አሰረው አዳምን ነጻ አወጣው፤ ከዛሬ ጀምሮ ሰላም ይሁን ሰላም፡፡
                     </div>
-                    <div class="audio-player">
+                    <div class="player-wrapper">
                         <audio controls preload="none">
-                            <source src="audio/t1.mp3" type="audio/mpeg" />
-                            Your browser does not support the audio element.
+                            <source src="audio/t1.mp3" />
                         </audio>
                     </div>
                 </article>
 
-                <article class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፪. ዮም ፍሥሐ ኮነ</div>
-                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
-                    </div>
-                    <div class="lyrics">
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-02 | RESURRECTION</div>
+                    <h3 class="hymn-name">፪. ዮም ፍሥሐ</h3>
+                    <div class="lyrics-box">
                         ዮም ፍሥሐ ኮነ ሰንበተ ክርስቲያን፤<br />
                         እስመ ተንሥአ ክርስቶስ እሙታን፡፡
                     </div>
                     <div class="translation-box">
-                        <strong>ትርጉም፦</strong> ክርስቶስ ከሙታን ተለይቶ ተነሥቷልና ዛሬ በክርስቲያን
+                        <strong>ትርጉም:</strong> ክርስቶስ ከሙታን ተለይቶ ተነሥቷልና ዛሬ በክርስቲያን
                         ሰንበት (እሁድ) ደስታ ሆነ፡፡
                     </div>
-                    <div class="audio-player">
+                    <div class="player-wrapper">
                         <audio controls preload="none">
-                            <source src="audio/t2.mp3" type="audio/mpeg" />
+                            <source src="audio/t2.mp3" />
                         </audio>
                     </div>
                 </article>
 
-                <article class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፫. ዝንቱ ውእቱ መካን</div>
-                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
-                    </div>
-                    <div class="lyrics">
-                        ዝንቱ ውእቱ መካን ዘተቀብረ ቦቱ እግዚእነ (፪)<br />
-                        ሰላም ለክሙ ኦ ማኅበረ ቅዱሳን (፪)
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-03 | RESURRECTION</div>
+                    <h3 class="hymn-name">፫. አማን በአማን</h3>
+                    <div class="lyrics-box">
+                        አማን በአማን ተንሥአ፤<br />
+                        ተንሥአ እምነ ሙታን፡፡
                     </div>
                     <div class="translation-box">
-                        <strong>ትርጉም፦</strong> ጌታችን የተቀበረበት ቦታ ይህ ነው፤ ቅዱሳን ሆይ
-                        ሰላም ለእናንተ ይሁን።
+                        <strong>ትርጉም:</strong> በእውነት በእውነት ከሙታን መካከል ተለይቶ ተነሣ፡፡
                     </div>
-                    <div class="audio-player">
+                    <div class="player-wrapper">
                         <audio controls preload="none">
-                            <source src="audio/t3.mp3" type="audio/mpeg" />
+                            <source src="audio/t3.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-04 | RESURRECTION</div>
+                    <h3 class="hymn-name">፬. ገብረ ሰላም</h3>
+                    <div class="lyrics-box">
+                        ገብረ ሰላም በመስቀሉ፤<br />
+                        ትንሣኤሁ አግሃደ ሰላመ ገብረ፡፡
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም:</strong> በትንሣኤው ገለጠው (አበራው)፤ በመስቀሉም ሰላምን
+                        አደረገ (መሠረተ)፡፡
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/t4.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-05 | RESURRECTION</div>
+                    <h3 class="hymn-name">፭. ግብረ በዓል</h3>
+                    <div class="lyrics-box">
+                        ግብረ በዓለ በትፍሥሕት፤<br />
+                        ዘቲ ፋሲካ ቀዳሚት ሕግ፡፡
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም:</strong> በደስታ በዓልን አድርጉ፤ ይህች ፋሲካ የቀደመች ሕግ
+                        ናት፡፡
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/t5.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-06 | RESURRECTION</div>
+                    <h3 class="hymn-name">፮. ሰላም</h3>
+                    <div class="lyrics-box">
+                        ሰላም፤<br />
+                        እምይእዜሰ ይኩን ሰላም፡፡
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም:</strong> ከእንግዲህ ወዲህ ሰላም ይሁን፡፡
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/t6.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-07 | RESURRECTION</div>
+                    <h3 class="hymn-name">፯. ለጻድቃን</h3>
+                    <div class="lyrics-box">
+                        ለጻድቃን መደኃኒቶሙ፤<br />
+                        እሙንቱ ተንሥአ ክርስቶስ ተንሥአ መደኃኒት፡፡
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም:</strong> ለጻድቃን መድኃኒታቸው መድኃኒት የሆነው ክርስቶስ
+                        ከሙታን መካከል ተነሣ፡፡
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/t7.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-08 | RESURRECTION</div>
+                    <h3 class="hymn-name">፰. ሰበካ ትንሣኤ</h3>
+                    <div class="lyrics-box">
+                        ሰበካ ትንሣኤ፤<br />
+                        እዋልድሃ ለጽዮን፡፡
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም:</strong> የጽዮን ልጆች የትንሣኤውን መሰበክ (መገኘት)
+                        ተናገሩ፡፡
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/t8.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-09 | RESURRECTION</div>
+                    <h3 class="hymn-name">፱. ፋሲካ</h3>
+                    <div class="lyrics-box">
+                        ፋሲካ፤<br />
+                        ተዝካረ ትንሣኤሁ ለመድኃኒትነ፡፡
+                    </div>
+                    <div class="translation-box">
+                        <strong>ትርጉም:</strong> ፋሲካ የመድኃኒታችን የትንሣኤው መታሰቢያ በዓል
+                        ነው፡፡
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/t9.mp3" />
                         </audio>
                     </div>
                 </article>
             </section>
 
-            <section id="ascension" class="theme-asc">
-                <h2 class="section-title">☁️ የእርገት መዝሙራት</h2>
+            <section id="ascension">
+                <div class="section-divider">
+                    <h2>☁️ የእርገት መዝሙራት</h2>
+                    <div class="line"></div>
+                </div>
 
-                <article class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፩. ዐርገ በስብሐት</div>
-                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
-                    </div>
-                    <div class="lyrics">
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-10 | ASCENSION</div>
+                    <h3 class="hymn-name">፩. ዐርገ በስብሐት</h3>
+                    <div class="lyrics-box">
                         ዐርገ በስብሐት ውስተ ሰማያት (፪)<br />
                         በለበወ ወበይባቤ (፪)
                     </div>
-                    <div class="translation-box">
-                        <strong>ትርጉም፦</strong> ጌታችን በምስጋና ወደ ሰማያት ወጣ፤ በደስታና
-                        በእልልታም አረገ።
-                    </div>
-                    <div class="audio-player">
+                    <div class="player-wrapper">
                         <audio controls preload="none">
-                            <source src="audio/e1.mp3" type="audio/mpeg" />
+                            <source src="audio/e1.mp3" />
                         </audio>
                     </div>
                 </article>
 
-                <article class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፪. ዐርገ ወልድ</div>
-                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
-                    </div>
-                    <div class="lyrics">
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-11 | ASCENSION</div>
+                    <h3 class="hymn-name">፪. ዐርገ ወልድ</h3>
+                    <div class="lyrics-box">
                         ዐርገ ወልድ ደበ መንበሩ (፪)<br />
                         በስብሐተ መላእክት ትንሣኤሁ ዘመነ (፪)
                     </div>
-                    <div class="translation-box">
-                        <strong>ትርጉም፦</strong> ወልድ ወደ ዙፋኑ ወጣ፤ በመላእክት ምስጋናም
-                        ትንሣኤውን አበሰረ።
-                    </div>
-                    <div class="audio-player">
+                    <div class="player-wrapper">
                         <audio controls preload="none">
-                            <source src="audio/e2.mp3" type="audio/mpeg" />
+                            <source src="audio/e2.mp3" />
                         </audio>
                     </div>
                 </article>
 
-                <article class="song-card">
-                    <div class="song-header">
-                        <div class="song-title">፫. ዐርገ እግዚአብሔር</div>
-                        <span style="color: #666; font-size: 12px">ግዕዝ</span>
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-12 | PENTECOST</div>
+                    <h3 class="hymn-name">፫. መንፈስ ቅዱስ ወረደ</h3>
+                    <div class="lyrics-box">
+                        መንፈስ ቅዱስ ወረደ ላዕለ ሐዋርያት (፪)<br />
+                        ተመሲሎ በነደ እሳት (፪)
                     </div>
-                    <div class="lyrics">
-                        ዐርገ እግዚአብሔር በቃለ ቀርን (፪)<br />
-                        ወእግዚእነ በቃለ መለከት (፪)
-                    </div>
-                    <div class="translation-box">
-                        <strong>ትርጉም፦</strong> እግዚአብሔር በደስታ ድምፅ አረገ፤ ጌታችንም በመለከት
-                        ድምፅ ዐረገ።
-                    </div>
-                    <div class="audio-player">
+                    <div class="player-wrapper">
                         <audio controls preload="none">
-                            <source src="audio/e3.mp3" type="audio/mpeg" />
+                            <source src="audio/e3.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-13 | ASCENSION</div>
+                    <h3 class="hymn-name">፬. በዘዐርገ</h3>
+                    <div class="lyrics-box">
+                        በዘዐርገ በስብሐት ውስተ ሰማያት (፪)<br />
+                        ተኩነኑ ኩሎ መላእክት ወኩሉ ፍጥረት (፪)
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/e4.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-14 | ASCENSION</div>
+                    <h3 class="hymn-name">፭. እምድኅረ ትንሣኤ</h3>
+                    <div class="lyrics-box">
+                        እምድኅረ ትንሣኤ እሙታን (፪)<br />
+                        ዐርገ ውስተ ሰማያት (፪)
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/e5.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-15 | PENTECOST</div>
+                    <h3 class="hymn-name">፮. እስመ አሐዱ</h3>
+                    <div class="lyrics-box">
+                        እስመ አሐዱ ውእቱ መንፈስ ቅዱስ (፪)<br />
+                        ዘተሐውጠ ላዕለ ሐዋርያት በመንፈሰ ቅዱስ ነበቡ በነገረ ኩሉ በሐውርት (፪)
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/e6.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-16 | ASCENSION</div>
+                    <h3 class="hymn-name">፯. ትንሣኤሁ ገብረ</h3>
+                    <div class="lyrics-box">
+                        ትንሣኤሁ ገብረ በሰንበት ዐርገ በስብሐት ውስተ ሰማያት (፪)<br />
+                        ሰላመ ይደሉ ለኩሎነ ወለበወነ ወየበበነ (፪)
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/e7.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-17 | SECOND COMING</div>
+                    <h3 class="hymn-name">፰. ዳግመ ይመጽእ</h3>
+                    <div class="lyrics-box">
+                        ዐርገ በስብሐት ውስተ ሰማያት (፪)<br />
+                        ዳግመ ይመጽእ በዝየሁ ስብሐት (፪)
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/e8.mp3" />
+                        </audio>
+                    </div>
+                </article>
+
+                <article class="hymn-card">
+                    <div class="hymn-meta">H-18 | ASCENSION</div>
+                    <h3 class="hymn-name">፱. ይቤሎሙ ኢየሱስ</h3>
+                    <div class="lyrics-area lyrics-box">
+                        ይቤሎሙ ኢየሱስ ለሐዋርያሁ (፪)<br />
+                        አዐርግ በሰላም ኀበ አቡየ ወአቡክሙ ኀበ አምላኪየ ወአምላክክሙ (፪)
+                    </div>
+                    <div class="player-wrapper">
+                        <audio controls preload="none">
+                            <source src="audio/e9.mp3" />
                         </audio>
                     </div>
                 </article>
@@ -646,95 +654,98 @@
         </main>
 
         <footer>
-            <p>የወልድያ ደብረብርሀን ቅድስት ሥላሴ የተክለሥላሴ ሰንበት ትምህርትቤት</p>
-            <p style="margin-top: 10px; font-weight: 300">
-                debrebrhan holy trinity church of woldia-teklesilassie sunday
-                school- V4.0.1
-            </p>
-            <p style="margin-top: 20px; font-size: 11px; opacity: 0.5">
-                Developed by sunday schools media departments © 2018
+            <p>ወልድያ ደብረ ብርሐን ቅድስት ሥላሴ ሰንበት ትምህርት ቤት</p>
+            <p style="margin-top: 10px; opacity: 0.5">
+                MEDIA & IT DEPARTMENT © 2026
             </p>
         </footer>
 
         <script>
-            /**
-             * 1. Intersection Observer for Scroll Animations
-             * Triggers cards and titles when they enter the viewport
-             */
-            const observerOptions = {
-                threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px",
-            };
+            // 1. Particle Background System
+            const canvas = document.getElementById("particle-canvas");
+            // (Logic for stars/particles generation)
+            function initParticles() {
+                for (let i = 0; i < 80; i++) {
+                    let p = document.createElement("div");
+                    p.style.position = "absolute";
+                    p.style.width = "2px";
+                    p.style.height = "2px";
+                    p.style.background = "white";
+                    p.style.borderRadius = "50%";
+                    p.style.left = Math.random() * 100 + "%";
+                    p.style.top = Math.random() * 100 + "%";
+                    p.style.opacity = Math.random();
+                    canvas.appendChild(p);
+                }
+            }
+            initParticles();
 
-            const scrollObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("visible");
-                        // Once visible, no need to observe anymore
-                        scrollObserver.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
+            // 2. Mouse Glow Tracker
+            const glow = document.getElementById("mouse-glow");
+            document.addEventListener("mousemove", (e) => {
+                glow.style.transform = `translate(${e.clientX - 300}px, ${e.clientY - 300}px)`;
+            });
 
-            // Register elements to observer
+            // 3. 3D Tilt Effect for Logo
+            const logo = document.getElementById("tilt-logo");
+            logo.addEventListener("mousemove", (e) => {
+                let rect = logo.getBoundingClientRect();
+                let x = (e.clientX - rect.left) / rect.width - 0.5;
+                let y = (e.clientY - rect.top) / rect.height - 0.5;
+                logo.style.transform = `rotateY(${x * 40}deg) rotateX(${y * -40}deg)`;
+            });
+            logo.addEventListener(
+                "mouseleave",
+                () => (logo.style.transform = "rotateY(0) rotateX(0)"),
+            );
+
+            // 4. Scroll Reveal Logic
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting)
+                            entry.target.classList.add("reveal");
+                    });
+                },
+                { threshold: 0.1 },
+            );
+
             document
-                .querySelectorAll(".song-card, .section-title")
-                .forEach((el) => {
-                    scrollObserver.observe(el);
-                });
+                .querySelectorAll(".hymn-card")
+                .forEach((card) => observer.observe(card));
 
-            /**
-             * 2. Intelligent Audio Control
-             * Ensures only one track plays at a time and adds visual feedback
-             */
-            const allAudios = document.querySelectorAll("audio");
-            allAudios.forEach((audio) => {
+            // 5. Smart Audio Manager
+            const audios = document.querySelectorAll("audio");
+            audios.forEach((audio) => {
                 audio.addEventListener("play", () => {
-                    // Pause all other audios
-                    allAudios.forEach((otherAudio) => {
-                        if (otherAudio !== audio) {
-                            otherAudio.pause();
+                    audios.forEach((other) => {
+                        if (other !== audio) {
+                            other.pause();
+                            other.currentTime = 0;
                         }
                     });
-
-                    // Add "Glow" effect to active card
-                    audio.closest(".song-card").style.boxShadow =
-                        "0 0 30px rgba(255, 215, 0, 0.2)";
-                });
-
-                audio.addEventListener("pause", () => {
-                    audio.closest(".song-card").style.boxShadow = "none";
+                    // Highlight active card
+                    document
+                        .querySelectorAll(".hymn-card")
+                        .forEach((c) => c.classList.remove("active-play"));
+                    audio.closest(".hymn-card").classList.add("active-play");
                 });
             });
 
-            /**
-             * 3. Navigation Active State on Scroll
-             */
+            // 6. Navigation Link Highlighting
             window.addEventListener("scroll", () => {
                 let current = "";
-                const sections = document.querySelectorAll("section");
-                const navLinks = document.querySelectorAll("nav a");
-
-                sections.forEach((section) => {
+                document.querySelectorAll("section").forEach((section) => {
                     const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 150) {
+                    if (pageYOffset >= sectionTop - 200)
                         current = section.getAttribute("id");
-                    }
                 });
-
-                navLinks.forEach((link) => {
-                    link.classList.remove("active");
-                    if (link.getAttribute("href").includes(current)) {
-                        link.classList.add("active");
-                    }
+                document.querySelectorAll("nav a").forEach((a) => {
+                    a.classList.remove("active");
+                    if (a.getAttribute("href").includes(current))
+                        a.classList.add("active");
                 });
             });
-
-            // Console Tag for Developers
-            console.log(
-                "%c Church Media Portal Loaded ",
-                "background: #ffd700; color: #000; font-weight: bold; padding: 5px;",
-            );
         </script>
     </body>
 </html>
