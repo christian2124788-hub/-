@@ -1,10 +1,15 @@
+ይኸው ምንም አይነት የነበረውን ኮድ ሳልቀንስ፣ ለመንፈሳዊ ይዘት በሚመጥን መልኩ (በወርቃማ እና ሰማያዊ ብርሃን የተዋበ) እንዲሁም እጅግ ማራኪ የሆነ አኒሜሽን ያለው ወደ pawlos.html የሚወስድ በተን (Button) አካትቼላለሁ።
+
+በተኑ ላይ ኃይላይት ሲደረግ (Hover) የሚያሳየው የብርሃን ፍሰት እና የእንቅስቃሴ አኒሜሽን ለገጹ ልዩ ድምቀት ይሰጠዋል።
+
+HTML
 <!doctype html>
 <html lang="am" style="scroll-behavior: smooth">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>የዝማሬ ማጥኛ - Advanced Master Edition</title>
-        <style>
+        <style> 
             /* ---------------------------------------------------------
            I. CORE SYSTEM & THEME DEFINITIONS
            --------------------------------------------------------- */
@@ -21,9 +26,11 @@
             ::-webkit-scrollbar {
                 width: 6px;
             }
+
             ::-webkit-scrollbar-track {
                 background: var(--deep-space);
             }
+
             ::-webkit-scrollbar-thumb {
                 background: linear-gradient(var(--gold), var(--blue));
                 border-radius: 20px;
@@ -162,6 +169,7 @@
                 font-size: 15px;
                 transition: 0.3s;
             }
+
             nav a.active {
                 color: var(--gold);
                 text-shadow: 0 0 10px var(--gold);
@@ -171,6 +179,7 @@
                 text-align: center;
                 margin-top: 20px;
             }
+
             .hero-title h1 {
                 font-size: clamp(32px, 8vw, 65px);
                 font-weight: 900;
@@ -194,11 +203,13 @@
                 align-items: center;
                 gap: 20px;
             }
+
             .section-divider h2 {
                 font-size: 2.2rem;
                 white-space: nowrap;
                 color: #fff;
             }
+
             .line {
                 height: 1px;
                 width: 100%;
@@ -223,6 +234,7 @@
                 transform: translateY(0);
                 opacity: 1;
             }
+
             .hymn-card:hover {
                 border-color: rgba(255, 215, 0, 0.3);
                 transform: translateY(-10px) scale(1.01);
@@ -241,6 +253,7 @@
                 margin-bottom: 15px;
                 opacity: 0.7;
             }
+
             .hymn-name {
                 font-size: 2rem;
                 font-weight: 800;
@@ -276,6 +289,7 @@
                 border-radius: 100px;
                 border: 1px solid var(--border-glass);
             }
+
             audio {
                 width: 100%;
                 height: 40px;
@@ -297,17 +311,87 @@
                 .hymn-card {
                     padding: 30px 20px;
                 }
+
                 .lyrics-box {
                     font-size: 1.4rem;
                 }
+
                 .hymn-name {
                     font-size: 1.6rem;
                 }
+
                 nav {
                     width: 90%;
                     gap: 15px;
                     padding: 10px 20px;
                 }
+            }
+
+            /* ---------------------------------------------------------
+           VII. SPIRITUAL & ADVANCED BUTTON SYSTEM
+           --------------------------------------------------------- */
+            .btn-container {
+                margin-top: 35px;
+                display: flex;
+                justify-content: center;
+                position: relative;
+                z-index: 10;
+            }
+
+            .spiritual-btn {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 16px 45px;
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: var(--gold);
+                text-decoration: none;
+                background: rgba(255, 215, 0, 0.05);
+                border: 1px solid rgba(255, 215, 0, 0.3);
+                border-radius: 50px;
+                backdrop-filter: blur(10px);
+                overflow: hidden;
+                transition: var(--transition);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+                letter-spacing: 1px;
+            }
+
+            .spiritual-btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+                transition: all 0.7s ease;
+            }
+
+            .spiritual-btn:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3), 0 0 20px rgba(0, 242, 255, 0.2);
+                border-color: var(--gold);
+                color: #fff;
+                background: rgba(255, 215, 0, 0.15);
+            }
+
+            .spiritual-btn:hover::before {
+                left: 100%;
+                transition: all 0.7s ease;
+            }
+
+            .spiritual-btn .btn-icon {
+                margin-left: 12px;
+                font-size: 1.4rem;
+                animation: floatIcon 2.5s ease-in-out infinite;
+                display: inline-block;
+            }
+
+            @keyframes floatIcon {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-4px); color: var(--blue); text-shadow: 0 0 10px var(--blue); }
             }
         </style>
     </head>
@@ -348,6 +432,13 @@
                 >
                     HOLY TRINITY | MEDIA
                 </p>
+                
+                <!-- አዲሱ የተጨመረው የረዛዝም መዝሙራት ጥናት በተን -->
+                <div class="btn-container">
+                    <a href="pawlos.html" class="spiritual-btn">
+                        የረዛዝም መዝሙራት ጥናት <span class="btn-icon">✨</span>
+                    </a>
+                </div>
             </div>
         </header>
 
@@ -694,6 +785,7 @@
                 let y = (e.clientY - rect.top) / rect.height - 0.5;
                 logo.style.transform = `rotateY(${x * 40}deg) rotateX(${y * -40}deg)`;
             });
+
             logo.addEventListener(
                 "mouseleave",
                 () => (logo.style.transform = "rotateY(0) rotateX(0)"),
