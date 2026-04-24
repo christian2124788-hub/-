@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="am">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <meta name="theme-color" content="#110000" />
+        <title>ተክለሥላሴ-የጉባኤ መዝሙራት ጥናት</title>
+
+        <!-- Fonts & Icons -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Serif+Ethiopic:wght@400;700;900&family=Noto+Sans+Ethiopic:wght@300;400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        />
+
+        <style>
+            /* =========================================
+           1. CSS VARIABLES & COLOR PALETTE
+           ========================================= */
+            :root {
+                --maroon-deep: #0a0000;
+                --maroon-bright: #2a0101;
+                --gold: #d4af37;
+                --gold-bright: #ffdf73;
+                --gold-glow: rgba(212, 175, 55, 0.4);
+                --text-main: #f4e4bc;
+                --text-muted: rgba(244, 228, 188, 0.6);
+                --glass-bg: rgba(20, 0, 0, 0.45);
+                --border-glass: rgba(212, 175, 55, 0.15);
+                --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                background-color: var(--maroon-deep);
+                color: var(--text-main);
+                font-family: "Noto Sans Ethiopic", sans-serif;
+                overflow-x: hidden;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* -----------------------------------------
+           BACKGROUND PARTICLES
+           ----------------------------------------- */
+            #heavenlyParticles {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: -1;
+                pointer-events: none;
+                background: radial-gradient(
+                    circle at 50% 0%,
+                    var(--maroon-bright) 0%,
+                    var(--maroon-deep) 80%
+                );
+            }
+
+            /* Custom Scrollbar */
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: rgba(212, 175, 55, 0.3);
+                border-radius: 10px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--gold);
+            }
+
+            /* =========================================
+           2. HEADER & SEARCH
+           ========================================= */
+            header {
+                padding: 8vh 20px 3vh;
+                text-align: center;
+                animation: fadeInDown 1s ease-out;
+            }
+
+            .logo-box i {
+                font-size: 3.5rem;
+                color: var(--gold-bright);
+                filter: drop-shadow(0 0 15px var(--gold-glow));
+                animation: floatLogo 6s ease-in-out infinite;
+                margin-bottom: 1rem;
+            }
+
+            header h1 {
+                font-family: "Noto Serif Ethiopic", serif;
+                font-size: clamp(2rem, 5vw, 3.5rem);
+                font-weight: 900;
+                background: linear-gradient(
+                    135deg,
+                    #fff 0%,
+                    var(--gold) 50%,
+                    #fff 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                letter-spacing: 1px;
+                margin-bottom: 0.5rem;
+            }
+
+            .subtitle {
+                font-size: 0.85rem;
+                letter-spacing: 4px;
+                color: var(--gold);
+                text-transform: uppercase;
+                font-weight: 700;
+                opacity: 0.8;
+            }
+
+            .search-area {
+                max-width: 600px;
+                margin: 0 auto 3rem;
+                position: sticky;
+                top: 20px;
+                z-index: 100;
+                padding: 0 20px;
+                width: 100%;
+            }
+
+            .search-wrapper {
+                position: relative;
+                background: rgba(5, 0, 0, 0.7);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid var(--border-glass);
+                border-radius: 30px;
+                overflow: hidden;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                transition: var(--transition);
+            }
+
+            .search-wrapper:focus-within {
+                border-color: var(--gold);
+                box-shadow:
+                    0 10px 40px rgba(0, 0, 0, 0.8),
+                    0 0 20px rgba(212, 175, 55, 0.2);
+                transform: translateY(-2px);
+            }
+
+            .search-wrapper i {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--gold);
+                font-size: 1.1rem;
+            }
+
+            .search-input {
+                width: 100%;
+                background: transparent;
+                border: none;
+                padding: 18px 20px 18px 50px;
+                color: #fff;
+                font-size: 1.1rem;
+                outline: none;
+                font-family: "Noto Sans Ethiopic", sans-serif;
+            }
+            .search-input::placeholder {
+                color: var(--text-muted);
+                font-weight: 300;
+            }
+
+            /* =========================================
+           3. HYMN CARDS
+           ========================================= */
+            main {
+                flex-grow: 1;
+            }
+
+            .hymn-grid {
+                max-width: 850px;
+                margin: 0 auto;
+                padding: 0 20px 6vh;
+                width: 100%;
+            }
+
+            .no-results {
+                text-align: center;
+                padding: 3rem;
+                color: var(--text-muted);
+                font-size: 1.2rem;
+                display: none;
+                background: var(--glass-bg);
+                border-radius: 15px;
+                border: 1px dashed var(--border-glass);
+            }
+
+            .hymn-card {
+                background: var(--glass-bg);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid var(--border-glass);
+                border-radius: 16px;
+                margin-bottom: 20px;
+                overflow: hidden;
+                transition: var(--transition);
+                opacity: 0;
+                transform: translateY(20px);
+                animation: cardReveal 0.6s ease-out forwards;
+            }
+
+            .hymn-card:hover {
+                border-color: rgba(212, 175, 55, 0.4);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            }
+
+            .hymn-header {
+                padding: 20px 25px;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: linear-gradient(
+                    90deg,
+                    rgba(212, 175, 55, 0.03) 0%,
+                    transparent 100%
+                );
+            }
+
+            .hymn-info h3 {
+                font-family: "Noto Serif Ethiopic", serif;
+                font-size: 1.3rem;
+                color: var(--gold-bright);
+                margin-top: 6px;
+                font-weight: 700;
+            }
+
+            .hymn-type {
+                font-size: 0.75rem;
+                color: var(--text-main);
+                background: rgba(212, 175, 55, 0.15);
+                padding: 4px 12px;
+                border-radius: 12px;
+                letter-spacing: 1px;
+                border: 1px solid var(--border-glass);
+                display: inline-block;
+            }
+
+            .toggle-icon {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.03);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--gold);
+                transition: var(--transition);
+            }
+
+            .hymn-card.active .toggle-icon {
+                background: var(--gold);
+                color: var(--maroon-deep);
+                transform: rotate(180deg);
+            }
+            .hymn-card.active {
+                border-color: var(--gold);
+            }
+
+            /* =========================================
+           4. LYRICS & TELEPROMPTER
+           ========================================= */
+            .lyrics-section {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+                background: rgba(0, 0, 0, 0.5);
+                position: relative;
+            }
+            .hymn-card.active .lyrics-section {
+                max-height: 2500px;
+            }
+
+            .teleprompter-controls {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                padding: 15px;
+                border-bottom: 1px solid var(--border-glass);
+                background: rgba(0, 0, 0, 0.3);
+            }
+
+            .control-btn {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid var(--border-glass);
+                color: var(--text-main);
+                padding: 10px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-family: "Noto Sans Ethiopic", sans-serif;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: var(--transition);
+            }
+            .control-btn:hover {
+                background: rgba(212, 175, 55, 0.2);
+                color: var(--gold-bright);
+            }
+            .control-btn.active {
+                background: var(--gold);
+                color: var(--maroon-deep);
+                border-color: var(--gold);
+                font-weight: bold;
+            }
+
+            .lyrics-viewport {
+                padding: 50px 20px;
+                text-align: center;
+                font-size: 1.8rem;
+                line-height: 2.2;
+                font-weight: 700;
+                height: 400px;
+                overflow-y: auto;
+                scroll-behavior: smooth;
+                position: relative;
+                mask-image: linear-gradient(
+                    to bottom,
+                    transparent,
+                    black 15%,
+                    black 85%,
+                    transparent
+                );
+                -webkit-mask-image: linear-gradient(
+                    to bottom,
+                    transparent,
+                    black 15%,
+                    black 85%,
+                    transparent
+                );
+            }
+
+            .lyrics-viewport p {
+                margin-bottom: 25px;
+                opacity: 0.3;
+                transition: all 0.4s ease;
+                transform: scale(0.95);
+                cursor: pointer;
+            }
+
+            .lyrics-viewport p.active-line {
+                opacity: 1;
+                color: var(--gold-bright);
+                transform: scale(1.05);
+                text-shadow: 0 0 20px rgba(255, 223, 115, 0.3);
+            }
+
+            /* =========================================
+           5. FOOTER & ANIMATIONS
+           ========================================= */
+            footer {
+                text-align: center;
+                padding: 30px;
+                border-top: 1px solid var(--border-glass);
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                background: rgba(0, 0, 0, 0.3);
+            }
+
+            @keyframes floatLogo {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+            @keyframes fadeInDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            @keyframes cardReveal {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @media (max-width: 600px) {
+                .lyrics-viewport {
+                    font-size: 1.4rem;
+                    height: 350px;
+                    padding: 40px 15px;
+                }
+                .hymn-header {
+                    padding: 15px 20px;
+                }
+                header h1 {
+                    font-size: 1.8rem;
+                }
+                .search-input {
+                    padding: 15px 20px 15px 45px;
+                    font-size: 1rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="heavenlyParticles"></canvas>
+
+        <header>
+            <div class="logo-box"><i class="fas fa-dove"></i></div>
+            <h1>ተክለሥላሴ-የጉባኤ መዝሙራት ጥናት</h1>
+            <p class="subtitle">Woldia Holy Trinity • Media Dept</p>
+        </header>
+
+        <div class="search-area">
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input
+                    type="text"
+                    class="search-input"
+                    id="hymnSearch"
+                    placeholder="የመዝሙር ርዕስ ወይም ምድብ ይፈልጉ..."
+                    onkeyup="searchHymns()"
+                    autocomplete="off"
+                />
+            </div>
+        </div>
+
+        <main>
+            <div class="hymn-grid" id="hymnContainer">
+                <!-- መዝሙሮች እዚህ ይገባሉ -->
+            </div>
+            <div id="noResults" class="no-results">
+                <i
+                    class="fas fa-folder-open"
+                    style="
+                        font-size: 2rem;
+                        margin-bottom: 10px;
+                        color: var(--border-glass);
+                    "
+                ></i
+                ><br />
+                ምንም መዝሙር አልተገኘም...
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2018 ወልድያ ደብረ ብርሃን ቅድስት ሥላሴ ሰንበት ትምህርት ቤት</p>
+        </footer>
+
+        <script>
+            /* =========================================
+           1. PARTICLES ENGINE (Optimized)
+           ========================================= */
+            const canvas = document.getElementById("heavenlyParticles");
+            const ctx = canvas.getContext("2d");
+            let particlesArray = [];
+
+            function setupCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.speedY = Math.random() * -0.5 - 0.2;
+                    this.opacity = Math.random() * 0.4 + 0.1;
+                    this.speedX = (Math.random() - 0.5) * 0.3;
+                }
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    if (this.y < 0) {
+                        this.y = canvas.height;
+                        this.x = Math.random() * canvas.width;
+                    }
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                particlesArray = [];
+                // ለ performance ሲባል የብናኞችን ቁጥር አስተካክለናል
+                let numberOfParticles = Math.min(
+                    (canvas.width * canvas.height) / 10000,
+                    100,
+                );
+                for (let i = 0; i < numberOfParticles; i++) {
+                    particlesArray.push(new Particle());
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particlesArray.forEach((p) => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+
+            window.addEventListener("resize", () => {
+                setupCanvas();
+                initParticles();
+            });
+
+            setupCanvas();
+            initParticles();
+            animateParticles();
+
+            /* =========================================
+           2. DATA & DOM RENDER
+           ========================================= */
+            const hymnDatabase = [
+                {
+                    id: 1,
+                    title: "ክርስቶስ ትንሥአ እሙታን",
+                    category: "ትንሣኤ",
+                    lyrics: [
+                        "ክርስቶስ ትንሥአ እሙታን (፪)",
+                        "በዐቢይ ኃይል ወሥልጣን (፪)",
+                        "አሰሮ ለሰይጣን (፪)",
+                        "አግዐዞ ለአዳም (፪)",
+                        "ሰላም (፪)",
+                        "እምይእዜሰ ይኩን ሰላም (፪)",
+                    ],
+                },
+                {
+                    id: 2,
+                    title: "ኦ አምላክ ሆይ ቸርነትህ",
+                    category: "ምስጋና",
+                    lyrics: [
+                        "ኦ አምላክ ሆይ ቸርነትህ - ማለቂያ የለውም",
+                        "ለኃጢአተኛው የቆምክለት - በፍቅርህ ነውና",
+                        "በቀራንዮ አደባባይ - ደምህን አፍስሰህ",
+                        "ከሲኦል ባርነት መራኸን - ሕይወትን ሰጥተኸን",
+                        "ጌታ ሆይ ምስጋና - ላንተ ይገባሃል",
+                        "በቅዱሳን ማኅበር - ስምህ ይወደሳል",
+                    ],
+                },
+                {
+                    id: 3,
+                    title: "ድንግል ሆይ",
+                    category: "እመቤታችን",
+                    lyrics: [
+                        "ድንግል ሆይ ያንቺ መመረጥ",
+                        "ለእኛ ለሰው ልጆች ድኅነት ነው",
+                        "ከጨለማ ወደ ብርሃን",
+                        "የመራሽን ድልድይ ነሽ አንቺ",
+                        "የአዳም ተስፋ የሔዋን እፎይታ",
+                        "የነቢያት ትንቢት የሐዋርያት ስብከት",
+                        "የዓለም ሁሉ ብርሃን ነሽ አንቺ",
+                    ],
+                },
+                {
+                    id: 4,
+                    title: "በእንተ ስማ ለማርያም",
+                    category: "እመቤታችን",
+                    lyrics: [
+                        "በእንተ ስማ ለማርያም (፪)",
+                        "ትትፈታሕ ወትትሀደግ ኃጢአትየ",
+                        "ስለ ማርያም ስም (፪)",
+                        "ኃጢአቴ ይፋቅ ይተው",
+                        "ለዓለም ድኅነት የተመረጥሽ",
+                        "የአምላክ እናት ንጽሕት ሙሽራ",
+                        "ለኛ ለደካሞች አማላጅ ነሽ",
+                        "በቃል ኪዳንሽ እንድናለን",
+                    ],
+                },
+                {
+                    id: 5,
+                    title: "መስቀል ኃይልነ",
+                    category: "መስቀል",
+                    lyrics: [
+                        "መስቀል ኃይልነ (፫)",
+                        "መስቀል ጽንዕነ",
+                        "መስቀል ቤዛነ",
+                        "ወመድኃኒተ ነፍስነ",
+                        "የመስቀሉ ሥራ ለእኛ ሕይወት ነው",
+                        "የዲያብሎስ ሽንገላ ድል የተነሳበት",
+                        "በክርስቶስ ደም የተቀደሰው",
+                        "የድኅነታችን ዓርማ ነው",
+                    ],
+                },
+            ];
+
+            function renderHymns(data) {
+                const container = document.getElementById("hymnContainer");
+                container.innerHTML = data
+                    .map(
+                        (hymn, index) => `
+                <article class="hymn-card" data-id="${hymn.id}" style="animation-delay: ${index * 0.08}s">
+                    <div class="hymn-header" onclick="toggleHymn(this)">
+                        <div class="hymn-info">
+                            <span class="hymn-type"><i class="fas fa-cross"></i> ${hymn.category}</span>
+                            <h3>${hymn.title}</h3>
+                        </div>
+                        <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="lyrics-section">
+                        <div class="teleprompter-controls">
+                            <button class="control-btn play-btn" onclick="toggleScroll(this)"><i class="fas fa-play"></i> አጫውት</button>
+                            <button class="control-btn" onclick="adjustFont(this, 2)"><i class="fas fa-plus"></i></button>
+                            <button class="control-btn" onclick="adjustFont(this, -2)"><i class="fas fa-minus"></i></button>
+                        </div>
+                        <div class="lyrics-viewport" onscroll="highlightActiveLyric(this)">
+                            ${hymn.lyrics.map((line) => `<p onclick="jumpToLine(this)">${line}</p>`).join("")}
+                        </div>
+                    </div>
+                </article>
+            `,
+                    )
+                    .join("");
+            }
+
+            function searchHymns() {
+                const query = document
+                    .getElementById("hymnSearch")
+                    .value.toLowerCase();
+                const cards = document.querySelectorAll(".hymn-card");
+                const noResults = document.getElementById("noResults");
+                let visibleCount = 0;
+
+                cards.forEach((card) => {
+                    const hymnId = card.getAttribute("data-id");
+                    const hymnData = hymnDatabase.find((h) => h.id == hymnId);
+                    const title = hymnData.title.toLowerCase();
+                    const category = hymnData.category.toLowerCase();
+
+                    if (title.includes(query) || category.includes(query)) {
+                        card.style.display = "block";
+                        card.style.animation = "none";
+                        card.offsetHeight;
+                        card.style.animation = `fadeInUp 0.4s ease forwards ${visibleCount * 0.05}s`;
+                        visibleCount++;
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+
+                // ምንም ካልተገኘ ማሳወቂያ
+                noResults.style.display = visibleCount === 0 ? "block" : "none";
+            }
+
+            /* =========================================
+           3. APP LOGIC & TELEPROMPTER
+           ========================================= */
+            let activeCard = null;
+            const scrollStates = new Map();
+
+            function toggleHymn(el) {
+                const card = el.closest(".hymn-card");
+
+                // የከፈትነውን ሌላ ካርድ መዝጋት
+                if (activeCard && activeCard !== card) {
+                    activeCard.classList.remove("active");
+                    stopScroll(activeCard.querySelector(".play-btn"));
+                }
+
+                card.classList.toggle("active");
+                activeCard = card.classList.contains("active") ? card : null;
+
+                if (activeCard) {
+                    setTimeout(() => {
+                        const viewport = card.querySelector(".lyrics-viewport");
+                        highlightActiveLyric(viewport);
+                        // Smooth scroll to view
+                        const offsetPosition =
+                            card.getBoundingClientRect().top +
+                            window.pageYOffset -
+                            100;
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth",
+                        });
+                    }, 300);
+                }
+            }
+
+            function highlightActiveLyric(viewport) {
+                const paragraphs = viewport.querySelectorAll("p");
+                const viewportCenter =
+                    viewport.scrollTop + viewport.clientHeight / 2.5;
+                let closestElement = null;
+                let minDistance = Infinity;
+
+                paragraphs.forEach((p) => {
+                    p.classList.remove("active-line");
+                    const pCenter =
+                        p.offsetTop + p.clientHeight / 2 - viewport.offsetTop;
+                    const distance = Math.abs(viewportCenter - pCenter);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestElement = p;
+                    }
+                });
+
+                if (closestElement) closestElement.classList.add("active-line");
+            }
+
+            function toggleScroll(btn) {
+                const cardId = btn.closest(".hymn-card").dataset.id;
+                const state = scrollStates.get(cardId);
+                if (state && state.isActive) stopScroll(btn);
+                else startScroll(btn);
+            }
+
+            function startScroll(btn) {
+                const card = btn.closest(".hymn-card");
+                const viewport = card.querySelector(".lyrics-viewport");
+                const cardId = card.dataset.id;
+
+                btn.innerHTML = '<i class="fas fa-pause"></i> አቁም';
+                btn.classList.add("active");
+
+                const scroll = () => {
+                    viewport.scrollTop += 0.6; // የተስተካከለ ፍጥነት ለንባብ ምቹ
+                    if (
+                        viewport.scrollTop + viewport.clientHeight >=
+                        viewport.scrollHeight - 2
+                    ) {
+                        stopScroll(btn);
+                    } else {
+                        const state = scrollStates.get(cardId);
+                        if (state && state.isActive) {
+                            state.animationFrameId =
+                                requestAnimationFrame(scroll);
+                        }
+                    }
+                };
+
+                scrollStates.set(cardId, {
+                    isActive: true,
+                    animationFrameId: requestAnimationFrame(scroll),
+                });
+            }
+
+            function stopScroll(btn) {
+                if (!btn) return;
+                const cardId = btn.closest(".hymn-card").dataset.id;
+                const state = scrollStates.get(cardId);
+
+                if (state && state.animationFrameId) {
+                    cancelAnimationFrame(state.animationFrameId);
+                }
+
+                scrollStates.set(cardId, {
+                    isActive: false,
+                    animationFrameId: null,
+                });
+
+                btn.innerHTML = '<i class="fas fa-play"></i> አጫውት';
+                btn.classList.remove("active");
+            }
+
+            function adjustFont(btn, amount) {
+                const viewport = btn
+                    .closest(".lyrics-section")
+                    .querySelector(".lyrics-viewport");
+                const currentSize = parseFloat(
+                    window.getComputedStyle(viewport).fontSize,
+                );
+                const newSize = Math.max(
+                    16,
+                    Math.min(40, currentSize + amount),
+                ); // Limit font size
+                viewport.style.fontSize = newSize + "px";
+                highlightActiveLyric(viewport);
+            }
+
+            function jumpToLine(el) {
+                const viewport = el.closest(".lyrics-viewport");
+                const targetPos =
+                    el.offsetTop -
+                    viewport.offsetTop -
+                    viewport.clientHeight / 2.5 +
+                    el.clientHeight / 2;
+                viewport.scrollTo({ top: targetPos, behavior: "smooth" });
+            }
+
+            // Initialize App
+            document.addEventListener("DOMContentLoaded", () => {
+                renderHymns(hymnDatabase);
+            });
+        </script>
+    </body>
+</html>
